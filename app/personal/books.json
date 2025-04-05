@@ -1,0 +1,30 @@
+[
+    {
+        "isbn": "38774959",
+        "author": "George Orwell",
+        "title": "1984",
+        "numberOfPages": "200", 
+        "picture": "80"
+    },
+    {
+        "isbn": "12345678",
+        "author": "F. Scott Fitzgerald",
+        "title": "The Great Gatsby",
+        "numberOfPages": "350",
+        "picture": "120"
+    },
+    {
+        "isbn": "87654321",
+        "author": "J.D. Salinger",
+        "title": "The Catcher in the Rye",
+        "numberOfPages": "220",
+        "picture": "100"
+    },
+    {
+        "isbn": "98765432",
+        "author": "Gibbity Goatler",
+        "title": "The Goat Man",
+        "numberOfPages": "6047",
+        "picture": "80"
+    }
+]
