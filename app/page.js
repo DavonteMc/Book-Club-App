@@ -16,10 +16,10 @@ export default function LandingPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold p-2">Welcome to the Home Page</h1>
+      <h1 className="text-3xl font-bold p-2">Welcome</h1>
       {user ? (
         <div className="flex flex-col gap-6 ">
-          <p className="text-lg p-2">Hello, {user.displayName}</p>
+          <p className="text-lg p-2">Hello, {user.user_metadata.full_name}</p>
         </div>
       ) : (
         <button

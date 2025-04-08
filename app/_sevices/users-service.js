@@ -1,5 +1,4 @@
-
-import { db } from "../_utils/firebase"; // import Firebase config
+import { db } from "../_utils/supabase"; // import Firebase config
 
 import {
   collection,
@@ -36,10 +35,12 @@ export const getItems = async (userId) => {
     const itemsRef = collection(db, "users", userId, "items");
     const docSnapshot = await getDocs(itemsRef);
 
-    const items = docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(),}));
-      // create a new object based on the one from the database
+    const items = docSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    // create a new object based on the one from the database
     return items;
-    
   } catch (error) {
     console.error("Error in getEvent: ", error);
   }

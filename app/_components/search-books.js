@@ -2,9 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { fetchBooks } from "../_utils/fetch-context";
+import Book from "../_components/book";
 
-export default function SearchBooks({ onCreateGroup }) {
-  const [selection, setSelection] = useState(null);
+export default function SearchBooks({
+  onSelection,
+  selectedBook,
+  onSearch,
+  showResults,
+}) {
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -22,8 +27,8 @@ export default function SearchBooks({ onCreateGroup }) {
     setSearchTerm(e.target.value);
   };
 
-  const handleSearchSelection = (e) => {
-    setSearchBy(e);
+  const handleSearchSelection = (searchSelection) => {
+    setSearchBy(searchSelection);
   };
 
   const handleSearch = async (e) => {
@@ -38,7 +43,8 @@ export default function SearchBooks({ onCreateGroup }) {
     }
 
     setLoading(true);
-    const data = await fetchBooks("/works/OL20716197W", searchBy);
+    onSearch(true);
+    const data = await fetchBooks(searchTerm, searchBy);
     setLoading(false);
     if (!data) {
       setNumFound(0);
@@ -51,20 +57,16 @@ export default function SearchBooks({ onCreateGroup }) {
     setResults(data.docs);
   };
 
-  const handleBookSelection = (e) => {
-    setSelection(e.target.value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selection === null || selection === undefined) {
+    if (selectedBook === null || selectedBook === undefined) {
       setError("no-selection");
       return;
     }
-    setGroup({ ...group, book: selection.key });
+    setGroup({ ...group, book: selectedBook.key });
   };
 
-  useEffect(() => {}, [selection]);
+  useEffect(() => {}, [selectedBook]);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -111,49 +113,42 @@ export default function SearchBooks({ onCreateGroup }) {
           )}
         </form>
 
-        <form onSubmit={handleSubmit} className="space-y-2">
-          {/* Book selection */}
+        {/* Book selection */}
+        {showResults && (
           <div>
             {results.length > 0 && (
-              <div>
+              <div className="space-y-2">
                 <p>
-                  <span className="font-bold">{numFound}</span> Books Found for{" "}
-                  <span className="font-bold">{searchTerm}</span>
+                  <span className="font-bold">{numFound}</span> Books found with
+                  the{" "}
+                  <span className="font-semibold capitalize">{searchBy}</span>{" "}
+                  of <span className="font-bold">{searchTerm}</span>
                 </p>
-                <select
-                  value={group.book}
-                  onChange={(e) => handleBookSelection(e)}
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option disabled>Book</option>
-                  {results.map((book) => (
-                    <option key={book.key} value={book.key}>
-                      {book.title} by {book.author_name}
-                    </option>
-                  ))}
-                </select>
+                <p>Displaying up to 15</p>
+                <div>
+                  {results.length <= 15 &&
+                    results.map((book) => (
+                      <Book
+                        key={book.key}
+                        book={book}
+                        onBookSelection={onSelection}
+                      />
+                    ))}
+                  {results.length > 15 &&
+                    results
+                      .slice(0, 15)
+                      .map((book) => (
+                        <Book
+                          key={book.key}
+                          book={book}
+                          onBookSelection={onSelection}
+                        />
+                      ))}
+                </div>
               </div>
             )}
           </div>
-          {selection !== null && (
-            <p className="p-2 ml-2 w-1/3 font-bold text-lg">
-              {selection}
-            </p>
-          )}
-          {/* Group Name */}
-          <input
-            type="text"
-            value={group.name}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => handleGroupNameChange(e)}
-            placeholder="Enter Group Name"
-            required
-          />
-          <button type="submit">Create Group</button>
-          {error === "no-selection" && (
-            <p className="font-semibold">Please Select a Book</p>
-          )}
-        </form>
+        )}
       </div>
     </div>
   );

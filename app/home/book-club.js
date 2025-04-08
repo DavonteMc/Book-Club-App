@@ -14,6 +14,7 @@ import { useUserAuth } from "../_utils/auth-context";
 import bookData from "./books.json";
 import { useRouter } from "next/navigation";
 import SearchBooks from "../_components/search-books";
+import CreateGroup from "../_components/create-group";
 
 const messages = [
   {
@@ -44,8 +45,15 @@ const messages = [
 
 export default function BookClub({ onPageChange }) {
   const [page, setPage] = useState("book-club");
-  const { user, googleSignIn, firebaseSignOut } = useUserAuth();
+  const { user, googleSignIn, supabaseSignOut } = useUserAuth();
   const [groupStatus, setGroupStatus] = useState("none");
+  const [bookSelection, setSelection] = useState({});
+  const [showResults, setShowResults] = useState(false);
+  const [group, setGroup] = useState({
+    name: "",
+    book: "",
+  });
+
   const router = useRouter();
 
   const [books, setBooks] = useState([]);
@@ -53,6 +61,25 @@ export default function BookClub({ onPageChange }) {
   let bookList = [...bookData];
 
   const visibleMessages = messages.slice(-4); // Show last 4 messages
+
+  const handleBookSelection = (book) => {
+    setSelection(book);
+    setShowResults(false);
+  };
+
+  const handleGroupNameChange = (e) => {
+    setGroup({ ...group, name: e.target.value });
+  };
+
+  const handleGroupCreation = (e) => {
+    e.preventDefault();
+    if (bookSelection === null || bookSelection === undefined) {
+      setError("no-selection");
+      return;
+    }
+    setGroup({ ...group, book: bookSelection });
+    setGroupStatus("inGroup");
+  };
 
   useEffect(() => {}, [user]);
 
@@ -94,7 +121,7 @@ export default function BookClub({ onPageChange }) {
               label="Personal Summary"
             />
             <NavItem
-              onLogOut={firebaseSignOut}
+              onLogOut={supabaseSignOut}
               icon={<LogOut size={18} />}
               label="Logout"
             />
@@ -105,7 +132,7 @@ export default function BookClub({ onPageChange }) {
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto ">
         <h1 className="text-3xl font-bold mb-6">
-          {user.displayName}'s Overview
+          {user.user_metadata.full_name}'s Overview
         </h1>
 
         {/* Group Progress Section */}
@@ -138,14 +165,26 @@ export default function BookClub({ onPageChange }) {
           <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
             <h2 className="font-semibold text-2xl mb-4">Create a Book Club</h2>
 
-            <SearchBooks />
+            <div className="flex flex-col gap-4">
+              <SearchBooks
+                onSelection={handleBookSelection}
+                selectedBook={bookSelection}
+                onSearch={setShowResults}
+                showResults={showResults}
+              />
+              <CreateGroup
+                onGroupNameChange={handleGroupNameChange}
+                selectedBook={bookSelection}
+                onGroupCreation={handleGroupCreation}
+                currentGroup={group}
+              />
+            </div>
           </div>
         )}
         {groupStatus === "inGroup" && (
           <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
             <h3 className="font-semibold text-2xl mb-4">
-              Group Progress for{" "}
-              <span className="font-bold">{bookList[0].title}</span>
+              Group Progress for <span className="font-bold">{group.name}</span>
             </h3>
             <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
               <ProgressItem label="User1" value={42} />

@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 
 import BookClub from "./book-club";
-import PersonalPage from "./personal";
 
 
 export default function HomePage() {
@@ -15,7 +14,8 @@ export default function HomePage() {
   const handlePageChange = () => {
     if (page === "book-club") {
       setPage("personal-summary");
-    } else {
+    } 
+    else {
       setPage("book-club");
     }
   };
@@ -46,7 +46,7 @@ export default function HomePage() {
   }
   return (
     <div>
-        { page === "book-club" ? (<BookClub onPageChange={handlePageChange} />) : (<PersonalPage onPageChange={handlePageChange}/>) }
+        <BookClub currentPage={handlePageChange} />
     </div>
   )
 };

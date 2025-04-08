@@ -1,47 +1,49 @@
 "use client";
- 
+import supabase from "./supabase";
 import { useContext, createContext, useState, useEffect } from "react";
 
-import {
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-} from "firebase/auth";
-
-import { auth } from "./firebase";
-
 const AuthContext = createContext();
- 
+
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
- 
 
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
-  };
-
-
-  const firebaseSignOut = () => {
-    return signOut(auth);
-  };
-
- 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+  const googleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
     });
-    return () => unsubscribe();
-  }, [user]);
- 
+    if (error) console.error("Google sign-in error:", error);
+  };
+
+  const supabaseSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error("Sign out error:", error);
+  };
+
+  useEffect(() => {
+    const getSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+    };
+    getSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription?.unsubscribe();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, googleSignIn, firebaseSignOut }}>
+    <AuthContext.Provider value={{ user, googleSignIn, supabaseSignOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
- 
+
 export const useUserAuth = () => {
   return useContext(AuthContext);
 };

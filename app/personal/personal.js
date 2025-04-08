@@ -43,7 +43,7 @@ const messages = [
   // Add more hidden messages here
 ];
 
-export default function PersonalPage({onPageChange}) {
+export default function PersonalPage({ onPageChange }) {
   const [page, setPage] = useState("personal-summary");
   const { user, googleSignIn, firebaseSignOut } = useUserAuth();
   const [books, setBooks] = useState([]);
@@ -92,7 +92,11 @@ export default function PersonalPage({onPageChange}) {
               icon={<NotebookPen size={18} />}
               label="Personal Summary"
             />
-            <NavItem onLogOut={firebaseSignOut}  icon={<LogOut size={18} />} label="Logout" />
+            <NavItem
+              onLogOut={firebaseSignOut}
+              icon={<LogOut size={18} />}
+              label="Logout"
+            />
           </ul>
         </nav>
       </aside>
