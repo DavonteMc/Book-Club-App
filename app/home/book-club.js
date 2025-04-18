@@ -13,6 +13,7 @@ import NavItem from "../_components/nav-item";
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { useGroup } from "../_utils/group-context";
+import { useDatabase } from "../_utils/data_context";
 import { useRouter } from "next/navigation";
 import CreateGroup from "../_components/create-group";
 import JoinGroup from "../_components/join-group";
@@ -21,7 +22,7 @@ import BackButton from "../_components/back-button";
 
 export default function BookClub({ onPageChange }) {
   const { user, googleSignIn, supabaseSignOut } = useUserAuth();
-  const { group, setGroupStatus, groupStatus } = useGroup();
+  const { group, setGroupStatus, groupStatus } = useDatabase();
   const [bookSelection, setSelection] = useState({});
   const [showResults, setShowResults] = useState(false);
 
@@ -121,6 +122,8 @@ export default function BookClub({ onPageChange }) {
           {groupStatus === "inGroup" && (
             <div>
               <BackButton heading={group.name + "'s Overview"} status="none" />
+              <p>Group Code: {group.code}</p>
+              <p>Book: {group.book.title} by {group.book.author}</p>
               <GroupOverview />
             </div>
           )}

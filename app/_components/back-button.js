@@ -1,10 +1,11 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { useGroup } from "../_utils/group-context";
+import { useDatabase } from "../_utils/data_context";
+
 
 export default function BackButton({ heading, status }) {
-  const { setGroupStatus } = useGroup();
+  const { setGroupStatus } = useDatabase();
 
   return (
     <div className="flex items-center mb-4">

@@ -1,7 +1,7 @@
 import "./globals.css";
 import { AuthContextProvider } from "./_utils/auth-context";
-import { GroupContextProvider } from "./_utils/group-context";
 import { ProgressContextProvider } from "./_utils/progress-context";
+import { DataContextProvider } from "./_utils/data_context";
 
 export const metadata = {
   title: "Shopping List",
@@ -13,9 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AuthContextProvider>
-          <GroupContextProvider>
-            <ProgressContextProvider>{children}</ProgressContextProvider>
-          </GroupContextProvider>
+          <DataContextProvider>
+              <ProgressContextProvider>{children}</ProgressContextProvider>
+          </DataContextProvider>
         </AuthContextProvider>
       </body>
     </html>

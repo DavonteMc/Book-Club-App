@@ -3,14 +3,14 @@
 import { useState } from "react";
 import ProgressTracker from "./progress-tracker";
 import UpdateProgress from "./update-progress";
-import { useGroup } from "../_utils/group-context";
+import { useDatabase } from "../_utils/data_context";
 import { useProgress } from "../_utils/progress-context";
 import { useUserAuth } from "../_utils/auth-context";
 import GroupNotes from "../_components/group-notes";
 
 export default function GroupOverview({}) {
   const { user } = useUserAuth();
-  const { group } = useGroup();
+  const { group } = useDatabase();
   const { groupProgress, setGroupProgress } = useProgress();
   const [update, setUpdate] = useState(false);
   const [notes, setNotes] = useState(false);

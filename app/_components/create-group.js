@@ -2,14 +2,18 @@
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useGroup } from "../_utils/group-context";
+import { useDatabase } from "../_utils/data_context";
 import AddBook from "./add-book";
 import SelectExistingBooks from "./select-book";
 
 export default function CreateGroup() {
-  const { group, setGroupName, setGroupBookId, handleGroupCreation } =
-    useGroup();
+  // const { group, setGroupName, setGroupBook, handleGroupCreation } =
+  //   useGroup();
   const [bookSelectionMethod, setBookSelectionMethod] = useState("add-new");
-  const [selectedBook, setSelectedBook] = useState(null);
+  
+  const { group, setGroup, createNewGroup, selectedBook, setSelectedBook } = useDatabase();
+  
+  
   const handleBookSelectionMethod = (selection) => {
     setBookSelectionMethod(selection);
   };
@@ -50,10 +54,10 @@ export default function CreateGroup() {
                 Existing Books
               </button>
               {bookSelectionMethod === "add-new" && (
-                <AddBook onBookSelection={setSelectedBook} />
+                <AddBook />
               )}
               {bookSelectionMethod === "existing" && (
-                <SelectExistingBooks onBookSelection={setSelectedBook} />
+                <SelectExistingBooks  />
               )}
             </div>
           )}
@@ -71,20 +75,20 @@ export default function CreateGroup() {
                 <h2 className="text-lg font-bold">Book Club Name</h2>
               </div>
 
-              <form onSubmit={handleGroupCreation} className="space-y-2 ml-6">
+              <form onSubmit={createNewGroup} className="space-y-2 ml-6">
                 {/* Book Club Group Name */}
                 <input
                   type="text"
                   value={group.name}
                   className="w-full px-2 py-1 border-neutral-700 border bg-neutral-400 bg-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
-                  onChange={(e) => setGroupName(e)}
+                  onChange={(e) => setGroup({group, name: e.target.value})}
                   placeholder="Enter Group Name"
                   required
                 />
                 {/* Book Selection */}
                 <p className="text-md font-semibold">Selected Book:</p>
                 <p className="text-md italic">
-                  {selectedBook.title} by {selectedBook.author}
+                  {selectedBook.title} by {selectedBook.author} 
                 </p>
                 <button
                   type="submit"

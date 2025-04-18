@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import { useDatabase } from "../_utils/data_context";
 
-export default function AddBook({ onBookSelection }) {
+export default function AddBook() {
   const [book, setBook] = useState({
     bookId: "",
     title: "",
@@ -9,6 +10,7 @@ export default function AddBook({ onBookSelection }) {
     numOfPages: "",
   });
   const [error, setError] = useState(false);
+  const { addBook, setSelectedBook } = useDatabase();
   // pass these in so it can be used on the personal page as well: const { group, setGroupBookId } = useGroup();
 
   const handleTitleChange = (e) => {
@@ -29,7 +31,7 @@ export default function AddBook({ onBookSelection }) {
     setBook({ ...book, numOfPages: pages });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (book.title === "") {
       alert("Please enter a title");
@@ -43,8 +45,8 @@ export default function AddBook({ onBookSelection }) {
       alert("Please enter a valid number of pages");
       return;
     }
-    // Handle book submission logic here
-    onBookSelection(book);
+
+    addBook(book);
     setBook({
       bookId: "",
       title: "",

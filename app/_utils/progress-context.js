@@ -1,12 +1,12 @@
 "use client";
 
-import { useGroup } from "./group-context";
 import { useContext, createContext, useState, useEffect } from "react";
+import { useDatabase } from "./data_context";
 
 const ProgressContext = createContext();
 
 export const ProgressContextProvider = ({ children }) => {
-  const { group } = useGroup();
+  const { group } = useDatabase();
   const [groupProgress, setGroupProgress] = useState({
     groupCode: group.code,
     memberProgress: [], // { userId: {currentPage: 0, note: ""} }
