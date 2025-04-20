@@ -6,7 +6,7 @@ import { useDatabase } from "../_utils/data_context";
 export default function SelectExistingBooks() {
   const [loading, setLoading] = useState(false);
   // pass these in so it can be used on the personal page as well: const { group, setGroupBookId } = useGroup();
-  const { books, getBooks, setSelectedBook } = useDatabase();
+  const { books, getBooks, setGroup, group } = useDatabase();
 
 
   // const handleBookChange = (book) => {
@@ -29,7 +29,7 @@ export default function SelectExistingBooks() {
             key={book.book_id}
             value={book}
             className="w-full bg-slate-800 rounded-lg text-white p-2 text-left hover:bg-slate-500 hover:text-black"
-            onClick={() => setSelectedBook(book)}
+            onClick={() => setGroup({...group, book: book})} 
           >
             {book.book_id}. {book.title} by {book.author}
           </button>

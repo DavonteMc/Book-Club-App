@@ -14,6 +14,7 @@ export const DataContextProvider = ({ children }) => {
   const [groupStatus, setGroupStatus] = useState("none");
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [groups, setGroups] = useState([]);
 
   const { user } = useUserAuth();
 
@@ -29,7 +30,7 @@ export const DataContextProvider = ({ children }) => {
     let insertBook = {
       title: book.title,
       author: book.author,
-      num_of_pages: book.numOfPages,
+      num_of_pages: book.num_of_pages,
     };
     const { data, error } = await supabase
       .from("books")
@@ -39,105 +40,87 @@ export const DataContextProvider = ({ children }) => {
 
     if (error) {
       console.error("Insert error:", error);
+      alert("Error adding book");
+      return;
     }
     console.log("Added book:", data);
     const newBook = data ?? null;
-    setSelectedBook(newBook);
-  };
-
-  const addToGroupTable = async (group) => {
-    const insertGroup = {
-      group_name: group.name,
-    };
-    const { groupDetails, error } = await supabase
-      .from("groups")
-      .insert([insertGroup])
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(error);
-    }
-    return groupDetails;
-  };
-
-  const addToGroupMembersTable = async (group_code) => {
-    const { error } = await supabase
-      .from("group_members")
-      .insert([{ group_code: group_code, user_id: user.id }]);
-
-    if (error) {
-      throw new Error(error);
-    }
-  };
-
-  const addToGroupBooksTable = async (group_code) => {
-    const { error } = await supabase
-      .from("group_books")
-      .insert([{ group_code: group_code, book_id: group.book.bookId }]);
-
-    if (error) {
-      throw new Error(error);
-    }
+    setGroup({ ...group, book: newBook });
   };
 
   const createNewGroup = async (e) => {
     e.preventDefault();
 
-    try {
-      const groupData = await addToGroupTable(group);
-      console.log("Group created:", groupData);
+    let { data, error } = await supabase.rpc("new_group_cf", {
+      arg_book_id: group.book.book_id,
+      arg_group_name: group.name,
+      arg_user_id: user.id,
+    });
+    if (error) {
+      console.error(error);
+      alert("Error creating group");
+      return;
+    } else console.log(data);
 
-      // Adds to group members table
-      await addToGroupMembersTable(groupData.group_code);
-      console.log("Added to group members:", groupData.group_code);
-
-      // Adds to group books table
-      await addToGroupBooksTable(groupData.group_code);
-      console.log("Added to group books:", groupData.group_code);
-      const newGroup = {
-        code: groupData.group_code,
-        name: groupData.group_name,
-        book: group.book,
-      };
-      console.log("Added group:", newGroup);
-      setGroup(newGroup);
-      setGroupStatus("inGroup");
-    } catch (error) {
-      console.error("Insert error:", error);
-    }
+    setGroup({ ...group, code: data });
+    console.log(`Added group: ${group.code}\n${group.name}\n${group.book}`);
+    alert(`Created group: ${group.code}\n${group.name}\n${group.book}`);
+    setGroupStatus("inGroup");
   };
 
-  const joinGroup = async (groupId) => {
-    const { data, error } = await supabase
-      .from("groups")
-      .insert([{ group_id: groupId, user_id: user.id }])
-      .select()
-      .single();
+  const joinGroup = async (e) => {
+    e.preventDefault();
+
+    let { data, error } = await supabase.rpc("join_group_cf", {
+      arg_group_code: group.code.trim(),
+      arg_user_id: user.id,
+    });
 
     if (error) {
       console.error("Join group error:", error);
+      alert("Join group error:", error);
+      return;
+      // Return the error message for use on the page
     }
     console.log("Joined group:", data);
+    const book = {
+      book_id: data.book_id,
+      title: data.title,
+      author: data.author,
+      num_of_pages: data.num_of_pages,
+    };
+    const joinedGroup = {
+      code: group.code,
+      name: data.group_name,
+      book: book,
+    };
+    setGroup(joinedGroup);
+    console.log(
+      `Joined group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
+    );
+    8;
+    alert(
+      `Joined group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
+    );
     setGroupStatus("inGroup");
   };
 
-  const handleGroupCreation = async (e) => {
-    e.preventDefault();
-    if (group.name === "") {
-      alert("Please enter a group name");
+  const getGroups = async () => {
+    const { data, error } = await supabase
+      .from("group_members")
+      .select("*")
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Error fetching groups:", error);
+    }
+
+    if (data.length === 0) {
       return;
     }
-    const newGroup = await createNewGroup(group);
-    setGroup(newGroup);
-    setGroupStatus("inGroup");
-  };
+    console.log("Fetched groups:", data);
 
-  const handleJoinGroup = (e) => {
-    e.preventDefault();
-    // Insert Into userGroups values (groupid, e.target.value)
-    // if it fails, alert("Group does not exist with code" + e.target.value);
-    setGroupStatus("inGroup");
+    // const groupIds = data.map((group) => group.group_code);
   };
 
   return (

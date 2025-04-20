@@ -24,7 +24,7 @@ export default function CreateGroup() {
       <div className="flex flex-col justify-between gap-4 mb-4">
         <div className="flex  gap-4 mb-4">
           {/* Book Selection Method Buttons*/}
-          {selectedBook === null && (
+          {group.book === null && (
             <div className="space-y-2 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg">
               <h3 className="text-lg font-bold">Book Selection</h3>
               <button
@@ -62,13 +62,13 @@ export default function CreateGroup() {
             </div>
           )}
 
-          {selectedBook != null && (
+          {group.book != null && (
             <div className="space-y-2 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg">
               {/* Back Button */}
               <div className="flex items-center mb-2">
                 <button
                   className=" hover:text-neutral-900 flex items-center"
-                  onClick={() => setSelectedBook(null)}
+                  onClick={() => setGroup({...group, book: null})}
                 >
                   <ChevronLeft size={18} className="mr-2" />
                 </button>
@@ -81,14 +81,14 @@ export default function CreateGroup() {
                   type="text"
                   value={group.name}
                   className="w-full px-2 py-1 border-neutral-700 border bg-neutral-400 bg-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
-                  onChange={(e) => setGroup({group, name: e.target.value})}
+                  onChange={(e) => setGroup({...group, name: e.target.value})}
                   placeholder="Enter Group Name"
                   required
                 />
                 {/* Book Selection */}
                 <p className="text-md font-semibold">Selected Book:</p>
                 <p className="text-md italic">
-                  {selectedBook.title} by {selectedBook.author} 
+                  {group.book.title} by {group.book.author} 
                 </p>
                 <button
                   type="submit"

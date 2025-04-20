@@ -48,10 +48,10 @@ export default function AddBook() {
 
     addBook(book);
     setBook({
-      bookId: "",
+      book_id: "",
       title: "",
       author: "",
-      numOfPages: 0,
+      num_of_pages: 0,
     });
   };
 

@@ -29,6 +29,11 @@ export default function BookClub({ onPageChange }) {
   const router = useRouter();
 
   useEffect(() => {}, [user]);
+  useEffect(() => {
+    if (group.code.length() === 36) {
+      setGroupStatus("inGroup");
+    }
+  }, [groupStatus]);
 
   if (!user) {
     return (
@@ -91,6 +96,12 @@ export default function BookClub({ onPageChange }) {
               </h3>
               <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
                 <div className="space-x-4">
+                <button
+                    onClick={() => setGroupStatus("load-group")}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Load Book Club
+                  </button>
                   <button
                     onClick={() => setGroupStatus("create-group")}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg"
@@ -105,6 +116,12 @@ export default function BookClub({ onPageChange }) {
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+          {groupStatus === "load-group" && (
+            <div>
+              <BackButton heading="Create a Book Club" status="none" />
+              <CreateGroup />
             </div>
           )}
           {groupStatus === "create-group" && (
