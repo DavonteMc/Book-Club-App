@@ -1,23 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProgressTracker from "./progress-tracker";
 import UpdateProgress from "./update-progress";
 import { useDatabase } from "../_utils/data_context";
-import { useProgress } from "../_utils/progress-context";
 import { useUserAuth } from "../_utils/auth-context";
 import GroupNotes from "../_components/group-notes";
 
 export default function GroupOverview({}) {
   const { user } = useUserAuth();
-  const { group } = useDatabase();
-  const { groupProgress, setGroupProgress } = useProgress();
+  const { group, getGroupMemberProgress, progress } = useDatabase();
   const [update, setUpdate] = useState(false);
+  const [updateProcessed, setUpdateProcessed] = useState(false);
   const [notes, setNotes] = useState(false);
 
-  const [progress, setProgress] = useState({ currentPage: 0, note: "" });
-
-  // const individualProgress = groupProgress.memberProgress[user.Id];
+  const generateProgress = (currentPage) => {
+    if (
+      currentPage === 0 ||
+      currentPage === null ||
+      currentPage === undefined
+    ) {
+      return 0;
+    }
+    const progressValue = (currentPage / group.book.num_of_pages) * 100;
+    return Math.round(progressValue);
+  };
 
   const handleUpdateClick = () => {
     if (update) {
@@ -34,6 +41,14 @@ export default function GroupOverview({}) {
       setNotes(true);
     }
   };
+
+  useEffect(() => {
+    const fetchGroupMembers = async () => {
+      await getGroupMemberProgress(group.code);
+    };
+    fetchGroupMembers();
+    setUpdateProcessed(false);
+  }, [updateProcessed]);
 
   return (
     <div>
@@ -56,14 +71,22 @@ export default function GroupOverview({}) {
         </div>
         {update && (
           <UpdateProgress
-            progress={progress}
-            onProgressChange={setProgress}
+            onCompletion={setUpdateProcessed}
             onUpdate={setUpdate}
           />
         )}
-        <ProgressTracker label="User1" value={45} />
-        <ProgressTracker label="User2" value={76} />
-        <ProgressTracker label="User3" value={87} />
+        {progress.length > 0 && (
+          <div>
+            {progress.map((member, index) => (
+              <ProgressTracker
+                key={index}
+                name={member.name}
+                page={member.currentPage}
+                value={generateProgress(member.currentPage)}
+              />
+            ))}
+          </div>
+        )}
         {notes && <GroupNotes />}
       </div>
     </div>

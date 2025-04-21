@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import CreateGroup from "../_components/create-group";
 import JoinGroup from "../_components/join-group";
 import GroupOverview from "../_components/group-overview";
+import LoadGroup from "../_components/load-group";
 import BackButton from "../_components/back-button";
 
 export default function BookClub({ onPageChange }) {
@@ -29,11 +30,11 @@ export default function BookClub({ onPageChange }) {
   const router = useRouter();
 
   useEffect(() => {}, [user]);
-  useEffect(() => {
-    if (group.code.length() === 36) {
-      setGroupStatus("inGroup");
-    }
-  }, [groupStatus]);
+  // useEffect(() => {
+  //   if (group.code.length() === 36) {
+  //     setGroupStatus("inGroup");
+  //   }
+  // }, [groupStatus]);
 
   if (!user) {
     return (
@@ -121,7 +122,7 @@ export default function BookClub({ onPageChange }) {
           {groupStatus === "load-group" && (
             <div>
               <BackButton heading="Create a Book Club" status="none" />
-              <CreateGroup />
+              <LoadGroup />
             </div>
           )}
           {groupStatus === "create-group" && (
