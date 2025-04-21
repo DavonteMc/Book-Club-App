@@ -18,6 +18,7 @@ export const DataContextProvider = ({ children }) => {
   const { user } = useUserAuth();
   const [progress, setProgress] = useState([]);
   const [showGroupProgress, setShowGroupProgress] = useState(false);
+  const [notes, setNotes] = useState([]);
 
   // Create Group Methods -------------------------------------
   const getBooks = async () => {
@@ -211,7 +212,7 @@ export const DataContextProvider = ({ children }) => {
     setProgress(groupMembers);
   };
 
-  // Update Progress Methods -------------------------------------
+  // Update Progress Method -------------------------------------
   const updateProgress = async (newPage, note) => {
     let { error } = await supabase.rpc("add_progress", {
       arg_book_id: group.book.book_id,
@@ -223,6 +224,47 @@ export const DataContextProvider = ({ children }) => {
     else {
       console.log("Updated progress");
     }
+  };
+
+  // Load Group Notes Method -------------------------------------
+  const getGroupNotes = async () => {
+    let { data, error } = await supabase.rpc("get_group_notes", {
+      arg_group_code: group.code,
+    });
+    if (error) console.error(error);
+    else console.log(data);
+
+    if (error) {
+      console.error("Error fetching groups:", error);
+    }
+    const date = new Date("2025-04-21T17:43:47.647169+00:00");
+    const formattedDate = date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: "UTC",
+    });
+    const groupNotes = data.map((member) => {
+      return {
+        member_name: member.member_name,
+        current_pg: member.current_pg,
+        date: new Date(member.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        }),
+        note: member.note,
+      };
+    });
+
+    console.log("Fetched Notes:", groupNotes);
+
+    setNotes(groupNotes);
   };
 
   return (
@@ -248,7 +290,9 @@ export const DataContextProvider = ({ children }) => {
         setShowGroupProgress,
         setProgress,
         progress,
-        updateProgress
+        updateProgress,
+        getGroupNotes,
+        notes,
       }}
     >
       {children}

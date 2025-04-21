@@ -1,7 +1,6 @@
 "use client";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
-import { useGroup } from "../_utils/group-context";
 import { useDatabase } from "../_utils/data_context";
 import AddBook from "./add-book";
 import SelectExistingBooks from "./select-book";

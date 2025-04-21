@@ -8,11 +8,9 @@ import {
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
-import UserStatCard from "../_components/user-stat-card";
 import NavItem from "../_components/nav-item";
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
-import { useGroup } from "../_utils/group-context";
 import { useDatabase } from "../_utils/data_context";
 import { useRouter } from "next/navigation";
 import CreateGroup from "../_components/create-group";
@@ -30,11 +28,7 @@ export default function BookClub({ onPageChange }) {
   const router = useRouter();
 
   useEffect(() => {}, [user]);
-  // useEffect(() => {
-  //   if (group.code.length() === 36) {
-  //     setGroupStatus("inGroup");
-  //   }
-  // }, [groupStatus]);
+
 
   if (!user) {
     return (

@@ -22,7 +22,7 @@ export default function LoadGroup() {
     <div className="bg-white p-6 rounded-lg shadow-sm">
       <div className="flex flex-col justify-between gap-4 mb-4">
         <p className="w-full bg-slate-800 text-center rounded-lg text-lg font-semibold text-white p-1">
-          Choose Books:
+          Choose Book Club:
         </p>
         {loading && <p>Loading...</p>}
         {groups.map((found, index) => (

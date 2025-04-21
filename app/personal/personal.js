@@ -9,49 +9,22 @@ import {
   Check,
   CircleMinus,
 } from "lucide-react";
-import UserStatCard from "../_components/user-stat-card";
 import NavItem from "../_components/nav-item";
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
-import bookData from "./books.json";
+import { useDatabase } from "../_utils/data_context";
 import { useRouter } from "next/navigation";
+import PersonalOverview from "../_components/personal-overview";
 
-const messages = [
-  {
-    module: "System Administrator",
-    message:
-      "Scheduled maintenance will occur at 02:00. All systems will be temporarily offline.",
-    timestamp: "15:42:12",
-  },
-  {
-    module: "Security Module",
-    message:
-      "Unusual login attempt blocked from IP 192.168.1.45. Added to watchlist.",
-    timestamp: "14:30:45",
-  },
-  {
-    module: "Network Control",
-    message:
-      "Bandwidth allocation adjusted for priority services during peak hours.",
-    timestamp: "12:15:33",
-  },
-  {
-    module: "Data Center",
-    message: "Backup verification complete. All data integrity checks passed.",
-    timestamp: "09:05:18",
-  },
-  // Add more hidden messages here
-];
+
 
 export default function PersonalPage({ onPageChange }) {
   const [page, setPage] = useState("personal-summary");
-  const { user, googleSignIn, firebaseSignOut } = useUserAuth();
+  const { user, googleSignIn, supabaseSignOut } = useUserAuth();
   const [books, setBooks] = useState([]);
   const router = useRouter();
 
-  let bookList = [...bookData];
 
-  const visibleMessages = messages.slice(-4); // Show last 4 messages
 
   useEffect(() => {}, [user]);
 
@@ -93,7 +66,7 @@ export default function PersonalPage({ onPageChange }) {
               label="Personal Summary"
             />
             <NavItem
-              onLogOut={firebaseSignOut}
+              onLogOut={supabaseSignOut}
               icon={<LogOut size={18} />}
               label="Logout"
             />
@@ -104,120 +77,8 @@ export default function PersonalPage({ onPageChange }) {
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto ">
         <h1 className="text-3xl font-bold mb-6">Personal Summary</h1>
-
-        {/* Progress Section */}
-        <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
-          <h3 className="font-semibold text-2xl mb-4">
-            Current Progress for{" "}
-            <span className="font-bold">{bookList[2].title}</span>
-          </h3>
-          <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
-            <ProgressItem label="User1" value={42} />
-          </div>
-        </div>
-
-        {/* Reading Goals Section  */}
-        <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
-          <h3 className="font-semibold text-2xl mb-4">
-            Reading Goals <span className="font-bold">{bookList[0].title}</span>
-          </h3>
-          <div className="shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold flex items-center gap-2">
-                <MessageSquare size={18} /> Notes
-              </h3>
-              <button className=" hover:text-neutral-900 flex items-center">
-                Add Goal <CirclePlus size={16} className="ml-1" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {visibleMessages.map((message, index) => (
-                <div
-                  key={index}
-                  className="relative pl-6 border-b-2 border-white border-opacity-30 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">
-                        {message.module}
-                      </h4>
-                    </div>
-                    <button className=" hover:text-neutral-900 flex items-center">
-                      Completed <Check size={16} className="ml-1" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Want-to-Read Section  */}
-        <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
-          <h3 className="font-semibold text-2xl mb-4">
-            Want-to-Read <span className="font-bold">{bookList[0].title}</span>
-          </h3>
-          <div className="shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold flex items-center gap-2">
-                <MessageSquare size={18} /> Notes
-              </h3>
-              <button className=" hover:text-neutral-900 flex items-center">
-                {/* Search for the book */}
-                Add Book <CirclePlus size={16} className="ml-1" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {visibleMessages.map((message, index) => (
-                <div
-                  key={index}
-                  className="relative pl-6 border-b-2 border-white border-opacity-30 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">
-                        {message.module}
-                      </h4>
-                    </div>
-                    <button className=" hover:text-neutral-900 flex items-center">
-                      Remove <CircleMinus size={16} className="ml-1" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Books Read Section  */}
-        <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
-          <h3 className="font-semibold text-2xl mb-4">
-            Read <span className="font-bold">{bookList[0].title}</span>
-          </h3>
-          <div className="shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
-            <div className="space-y-4">
-              {visibleMessages.map((message, index) => (
-                <div
-                  key={index}
-                  className="relative pl-6 border-b-2 border-white border-opacity-30 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">
-                        {message.module}
-                      </h4>
-                    </div>
-                    <button className=" hover:text-neutral-900 flex items-center">
-                      Read <Check size={16} className="ml-1" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <PersonalOverview/>
+        
       </main>
     </div>
   );

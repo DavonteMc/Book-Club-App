@@ -1,6 +1,5 @@
 import "./globals.css";
 import { AuthContextProvider } from "./_utils/auth-context";
-import { ProgressContextProvider } from "./_utils/progress-context";
 import { DataContextProvider } from "./_utils/data_context";
 
 export const metadata = {
@@ -13,9 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AuthContextProvider>
-          <DataContextProvider>
-              <ProgressContextProvider>{children}</ProgressContextProvider>
-          </DataContextProvider>
+          <DataContextProvider>{children}</DataContextProvider>
         </AuthContextProvider>
       </body>
     </html>

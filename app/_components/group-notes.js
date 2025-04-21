@@ -4,39 +4,13 @@ import {
   MessageSquare,
   ChevronRight,
   ChevronDown,
-  ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDatabase } from "../_utils/data_context";
 
-const messages = [
-  {
-    module: "System Administrator",
-    message:
-      "Scheduled maintenance will occur at 02:00. All systems will be temporarily offline.",
-    timestamp: "15:42:12",
-  },
-  {
-    module: "Security Module",
-    message:
-      "Unusual login attempt blocked from IP 192.168.1.45. Added to watchlist.",
-    timestamp: "14:30:45",
-  },
-  {
-    module: "Network Control",
-    message:
-      "Bandwidth allocation adjusted for priority services during peak hours.",
-    timestamp: "12:15:33",
-  },
-  {
-    module: "Data Center",
-    message: "Backup verification complete. All data integrity checks passed.",
-    timestamp: "09:05:18",
-  },
-  // Add more hidden messages here
-];
-const visibleMessages = messages.slice(-4); // Show last 4 messages
 
 export default function GroupNotes({}) {
+  const { getGroupNotes, notes } = useDatabase();
   const [showUserNote, setShowUserNote] = useState(false);
   const [userNoteIndex, setUserNoteIndex] = useState(null);
 
@@ -47,16 +21,22 @@ export default function GroupNotes({}) {
       setShowUserNote(true);
       return;
     }
-    
     if (showUserNote && userNoteIndex === index) {
       setShowUserNote(false);
       setUserNoteIndex(null);
       return;
     }
-
     setShowUserNote(true);
     setUserNoteIndex(index);
   };
+
+  useEffect(() => {
+    const fetchGroupNotes = async () => {
+      await getGroupNotes();
+    };
+    fetchGroupNotes();
+  }, []);
+
   return (
     <div className="mb-8">
       <div>
@@ -68,7 +48,7 @@ export default function GroupNotes({}) {
 
         {/* Sort by Page Number */}
         <div className="space-y-4">
-          {visibleMessages.map((message, index) => (
+          {notes.map((member, index) => (
             <div
               key={index}
               className="relative px-2 py-1 shadow-neutral-700 shadow-inner rounded-lg"
@@ -79,10 +59,7 @@ export default function GroupNotes({}) {
                     className=" hover:text-neutral-900 flex items-center"
                     onClick={() => handleUserNote(index)}
                   >
-                    {message.module}
-                    <span className="text-sm font-bold text-gray-500 ml-2">
-                      User#
-                    </span>
+                    {member.member_name} on page.{member.current_pg}
                     {showUserNote && index === userNoteIndex ? (
                       <ChevronDown size={16} className="ml-1" />
                     ) : (
@@ -92,19 +69,11 @@ export default function GroupNotes({}) {
                 </div>
 
                 <span className="text-xs text-gray-500 whitespace-nowrap">
-                  {message.timestamp}
-                  <span className="text-sm font-bold text-gray-500 ml-2">
-                    Current Page #
-                  </span>
+                  {member.date}
                 </span>
               </div>
               {showUserNote && index === userNoteIndex && (
-                <p className="text-gray-600 text-sm">
-                  {message.message}
-                  <span className="text-sm font-bold text-gray-500 ml-2">
-                    Note
-                  </span>
-                </p>
+                <p className="text-gray-600 text-sm">{member.note}</p>
               )}
             </div>
           ))}
