@@ -1,7 +1,7 @@
 "use client";
 
 import { useDatabase } from "../_utils/data_context";
-
+import { useEffect } from "react";
 
 
 export default function JoinGroup() {
@@ -12,6 +12,14 @@ export default function JoinGroup() {
     setGroup({ ...group, code: e.target.value });
   };
 
+
+  useEffect(() => {
+      setGroup({
+        code: "",
+        name: "",
+        book: null,
+      });
+    }, []);
 
   return (
     <div className="p-6 rounded-lg shadow-sm">

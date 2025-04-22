@@ -6,27 +6,31 @@ export default function NavItem({
   onPageChange,
   currentPage,
   onLogOut,
+  name
 }) {
   const activeSideBar =
     currentPage === "home" && label === "Book Club"
-      ? "bg-neutral-700 bg-opacity-35 font-bold"
+      ? "font-bold underline underline-offset-8"
       : currentPage === "personal" && label === "Personal Summary"
-      ? "bg-neutral-700 bg-opacity-35  font-bold"
+      ? "font-bold underline underline-offset-8"
       : "";
 
   return (
-    <Link href={currentPage === "home" ? "/personal" : "/home"}>
-      <li
-        className={`flex items-center space-x-2 p-2 
-         shadow-neutral-700 border-b-2 border-white border-opacity-30 rounded-lg shadow-inner 
+    <div className="flex items-center space-x-2">
+      <p className="text-lg italic font-semibold underline underline-offset-8">{name}</p>
+      <Link href={currentPage === "home" ? "/personal" : "/home"}>
+        <li
+          className={`flex items-center space-x-2 p-2 
+          rounded-lg  
          ${activeSideBar}
-          hover:bg-neutral-600 hover:bg-opacity-35 rounded-md cursor-pointer`}
-        onClick={label === "Logout" ? onLogOut : onPageChange}
-      >
-        {icon}
-        <span>{label}</span>
-      </li>
-    </Link>
+            font-semibold px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300 cursor-pointer`}
+          onClick={label === "Logout" ? onLogOut : onPageChange}
+        >
+          {icon}
+          <span>{label}</span>
+        </li>
+      </Link>
+    </div>
   );
 }
 // border-teal-500 border-2 border-opacity-30 shadow-teal-500 p-6 rounded-lg shadow-md

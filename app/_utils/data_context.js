@@ -12,6 +12,7 @@ export const DataContextProvider = ({ children }) => {
     book: null,
   });
   const [groupStatus, setGroupStatus] = useState("none");
+  const [personalStatus, setPersonalStatus] = useState("none");
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
   const [groups, setGroups] = useState([]);
@@ -19,6 +20,8 @@ export const DataContextProvider = ({ children }) => {
   const [progress, setProgress] = useState([]);
   const [showGroupProgress, setShowGroupProgress] = useState(false);
   const [notes, setNotes] = useState([]);
+  const [personalBook, setPersonalBook] = useState(null);
+  
 
   // Create Group Methods -------------------------------------
   const getBooks = async () => {
@@ -29,11 +32,11 @@ export const DataContextProvider = ({ children }) => {
     setBooks(data);
   };
 
-  const addBook = async (book) => {
+  const addBook = async (book, type) => {
     let insertBook = {
       title: book.title,
       author: book.author,
-      num_of_pages: book.num_of_pages,
+      num_of_pages: book.numOfPages,
     };
     let { data, error } = await supabase
       .from("books")
@@ -48,7 +51,13 @@ export const DataContextProvider = ({ children }) => {
     }
     console.log("Added book:", data);
     const newBook = data ?? null;
-    setGroup({ ...group, book: newBook });
+    if (type === "group") {
+      setGroup({ ...group, book: newBook });
+      console.log("Selected book:", group.book);
+      return;
+    }
+    setPersonalBook(newBook);
+    console.log("Selected book:", personalBook);
   };
 
   const createNewGroup = async (e) => {
@@ -267,6 +276,27 @@ export const DataContextProvider = ({ children }) => {
     setNotes(groupNotes);
   };
 
+  // Personal Progress Method -------------------------------------
+  const addPersonalBook = async (book) => {};
+
+  const getUserProgress = async () => {
+    let { data, error } = await supabase.rpc("get_member_progress", {
+      arg_book_id: group.book.book_id,
+      arg_user_id: members[i].user_id,
+    });
+    if (error) {
+      console.error("Error fetching group member progress:", error);
+    } else {
+      console.log("Fetched group member progress:", data);
+      let member = {
+        name: data.member_name,
+        currentPage: data.current_pg,
+        date: data.date,
+      };
+      console.log("Member progress:", member);
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -293,6 +323,10 @@ export const DataContextProvider = ({ children }) => {
         updateProgress,
         getGroupNotes,
         notes,
+        personalBook,
+        setPersonalBook,
+        setPersonalStatus,
+        personalStatus
       }}
     >
       {children}

@@ -4,14 +4,7 @@ import { useDatabase } from "../_utils/data_context";
 
 export default function LoadGroup() {
   const [loading, setLoading] = useState(false);
-  // pass these in so it can be used on the personal page as well: const { group, setGroupBookId } = useGroup();
   const { groups, getGroups, assignGroup } = useDatabase();
-
-  // const handleBookChange = (book) => {
-  //   //onBookSelection(books.find((book) => book.bookId === e.target.value));
-  //   setSelectedBook(book);
-  //   // setBook can be used to set the selected bookId in the group context
-  // };
 
 
   useEffect(() => {
@@ -19,16 +12,16 @@ export default function LoadGroup() {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <div className="flex flex-col justify-between gap-4 mb-4">
-        <p className="w-full bg-slate-800 text-center rounded-lg text-lg font-semibold text-white p-1">
-          Choose Book Club:
-        </p>
+    <div >
+      <div className="flex flex-col justify-between gap-4 mb-4 items-center">
+        <h2 className="w-1/2 text-center text-4xl font-semibold  p-1">
+          Choose Book Club
+        </h2>
         {loading && <p>Loading...</p>}
         {groups.map((found, index) => (
           <button
             key={index}
-            className="w-full bg-slate-800 rounded-lg text-white p-2 text-left hover:bg-slate-500 hover:text-black"
+            className="border-emerald-700 w-1/3 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
             onClick={() =>
               assignGroup({
                 code: found.groups.group_code,

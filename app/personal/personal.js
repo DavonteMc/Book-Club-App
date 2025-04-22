@@ -8,23 +8,26 @@ import {
   CirclePlus,
   Check,
   CircleMinus,
+  BookOpenText,
 } from "lucide-react";
 import NavItem from "../_components/nav-item";
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { useDatabase } from "../_utils/data_context";
 import { useRouter } from "next/navigation";
-import PersonalOverview from "../_components/personal-overview";
-
-
+import PersonalOverview from "../_components/under-development/personal-overview";
+import BackButton from "../_components/back-button";
+import TrackNewBook from "../_components/under-development/track-book";
+import ReadingGoals from "../_components/under-development/reading-goals";
+import WantToRead from "../_components/under-development/want-to-read";
+import ReadBooks from "../_components/under-development/read-books";
 
 export default function PersonalPage({ onPageChange }) {
   const [page, setPage] = useState("personal-summary");
   const { user, googleSignIn, supabaseSignOut } = useUserAuth();
+  const { group, personalStatus, setPersonalStatus } = useDatabase();
   const [books, setBooks] = useState([]);
   const router = useRouter();
-
-
 
   useEffect(() => {}, [user]);
 
@@ -37,7 +40,7 @@ export default function PersonalPage({ onPageChange }) {
         </p>
         <button
           className={
-            "w-1/3 p-2 rounded-xl hover:bg-indigo-600 active:bg-indigo-400 bg-indigo-300 font-semibold"
+            "w-1/3 p-2 rounded-xl hover:bg-emerald-600 active:bg-emerald-400 bg-emerald-300 font-semibold"
           }
           onClick={googleSignIn}
         >
@@ -50,7 +53,10 @@ export default function PersonalPage({ onPageChange }) {
     <div className="flex h-screen bg-neutral-50 text-black bg-opacity-75">
       {/* Sidebar */}
       <aside className="w-64 shadow-md p-4">
-        <h2 className="text-xl font-bold mb-6">Book Club</h2>
+        <div className="flex items-center mb-6">
+          <BookOpenText size={30} className="mr-3" />
+          <h2 className="text-2xl font-bold">Bookie</h2>
+        </div>
         <nav>
           <ul className="space-y-4 ">
             <NavItem
@@ -77,41 +83,58 @@ export default function PersonalPage({ onPageChange }) {
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto ">
         <h1 className="text-3xl font-bold mb-6">Personal Summary</h1>
-        <PersonalOverview/>
-        
+        {/* Personal Summary Section */}
+        <div className="mb-8 border-b-2 border-neutral-700 border-opacity-20">
+          {personalStatus === "none" && (
+            <div>
+              <p className="text-3xl">Under Development</p>
+              <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
+                <div className="space-x-4">
+                  <button
+                    onClick={() => setPersonalStatus("track-book")}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Track New Book
+                  </button>
+                  <button
+                    onClick={() => setPersonalStatus("load-book")}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Load a Tracked Book
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {personalStatus === "track-book" && (
+            <div>
+              <BackButton heading="Add a book to tracked" page="personal" />
+              <TrackNewBook />
+            </div>
+          )}
+          {personalStatus === "load-book" && (
+            <div>
+              <BackButton heading="Load a book" page="personal" />
+              <p className="text-3xl">Under Development</p>
+            </div>
+          )}
+          {personalStatus === "loaded-book" && (
+            <div>
+              <BackButton
+                heading={user.user_metadata.full_name + "'s Overview"}
+                page="personal"
+              />
+              <p className="text-3xl">Under Development</p>
+              <PersonalOverview />
+            </div>
+          )}
+        </div>
+        <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30"></div>
+
+        <ReadingGoals />
+        <ReadBooks />
+        <WantToRead />
       </main>
     </div>
   );
 }
-
-// Reusable Components
-
-const ProgressItem = ({ label, value }) => (
-  <div>
-    <div className="flex justify-between mb-1">
-      <span>{label}</span>
-      <span>{value}%</span>
-    </div>
-    <div className="w-full bg-gray-200 rounded-full h-2">
-      <div
-        className="bg-blue-500 rounded-full h-2"
-        style={{ width: `${value}%` }}
-      ></div>
-    </div>
-  </div>
-);
-
-const StatusItem = ({ label, status }) => (
-  <div className="flex items-center justify-between">
-    <span>{label}</span>
-    <span
-      className={`px-2 py-1 rounded-full text-sm ${
-        status === "active"
-          ? "bg-green-100 text-green-700"
-          : "bg-red-100 text-red-700"
-      }`}
-    >
-      {status}
-    </span>
-  </div>
-);

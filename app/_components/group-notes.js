@@ -38,20 +38,19 @@ export default function GroupNotes({}) {
   }, []);
 
   return (
-    <div className="mb-8">
+    <div className="mt-6 h-full w-1/2 rounded-lg p-3 ">
       <div>
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-semibold text-lg flex items-center gap-2">
-            <MessageSquare size={24} /> Notes
+            <MessageSquare size={24} /> Club Notes
           </h3>
         </div>
 
-        {/* Sort by Page Number */}
-        <div className="space-y-4">
+        <div className="flex flex-col space-y-4">
           {notes.map((member, index) => (
             <div
               key={index}
-              className="relative px-2 py-1 shadow-neutral-700 shadow-inner rounded-lg"
+              className="relative p-2 border border-emerald-800 rounded-lg"
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -68,12 +67,12 @@ export default function GroupNotes({}) {
                   </button>
                 </div>
 
-                <span className="text-xs text-gray-500 whitespace-nowrap">
+                <span className="text-xs text-emerald-900 whitespace-nowrap">
                   {member.date}
                 </span>
               </div>
               {showUserNote && index === userNoteIndex && (
-                <p className="text-gray-600 text-sm">{member.note}</p>
+                <p className="flex-1 text-sm mt-2">{member.note}</p>
               )}
             </div>
           ))}

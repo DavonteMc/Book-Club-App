@@ -9,12 +9,13 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
   const [errorMessage, setErrorMessage] = useState("");
   const { progress, updateProgress, group } = useDatabase();
   const [progressUpdate, setProgressUpdate] = useState({
-    currentPage:
-      progress.find((member) => member.name === user.user_metadata.full_name)
-        .currentPage,
+    currentPage: progress.find(
+      (member) => member.name === user.user_metadata.full_name
+    ).currentPage,
     newPage: 0,
     note: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handlePageChange = (e) => {
     if (isNaN(parseInt(e.target.value))) {
@@ -28,13 +29,16 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
     }
     if (parseInt(e.target.value) > group.book.num_of_pages) {
       setPageError(true);
-      setErrorMessage("Page number cannot exceed the total number of pages. Total: " + group.book.num_of_pages);
+      setErrorMessage(
+        "Page number cannot exceed the total number of pages of: " +
+          group.book.num_of_pages
+      );
       setProgressUpdate({
         ...progressUpdate,
         newPage: 0,
       });
       return;
-    };
+    }
     setPageError(false);
     setProgressUpdate({ ...progressUpdate, newPage: parseInt(e.target.value) });
   };
@@ -48,10 +52,12 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
       setPageError(true);
       return;
     }
-    if (progressUpdate.note === "") {
+    if (progressUpdate.note.trim() === "") {
       progressUpdate.note = null;
     }
+    setLoading(true);
     await updateProgress(progressUpdate.newPage, progressUpdate.note);
+    setLoading(false);
     setProgressUpdate({
       currentPage: progressUpdate.newPage,
       newPage: 0,
@@ -71,30 +77,36 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
   };
 
   return (
-    <div>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <p>Current Page: {progressUpdate.currentPage === undefined ? 0 : progressUpdate.currentPage}</p>
-        <p>Set New Current Page:</p>
-        <input
-          type="text"
-          placeholder="Enter page number"
-          className="border rounded p-2"
-          onChange={handlePageChange}
-          value={progressUpdate.newPage}
-        />
-        {pageError && (
-          <p className="text-red-500">{errorMessage}</p>
-        )}
+    <div >
+      <form className="flex w-full flex-col gap-2 mt-6" onSubmit={handleSubmit}>
+        <div className="flex gap-5">
+          <p>
+            Current Page:{" "}
+            <span className="font-bold">{progressUpdate.currentPage === undefined
+              ? 0
+              : progressUpdate.currentPage}</span>
+          </p>
+          <p className="text-center">Set New Current Page:</p>
+          <input
+            type="text"
+            placeholder="Enter page number"
+            className="border border-emerald-950 rounded pb-1 w-14 text-center text-emerald-950 bg-neutral-50"
+            onChange={handlePageChange}
+            value={progressUpdate.newPage}
+          />
+        </div>
+        {pageError && <p className="text-red-500/80">{errorMessage}</p>}
         <p>Note(s) for Section:</p>
         <input
           type="textarea"
-          className="border rounded p-2"
+          className="border border-emerald-950 p-3 rounded min-h-5 max-h-10 text-emerald-950 bg-neutral-50"
           onChange={handleNoteChange}
           value={progress.note}
         />
-        <button type="submit" className="rounded-md p-2 bg-slate-700">
+        <button type={loading ? "button" : "submit"} className="mt-3 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300">
           Update Progress
         </button>
+        {loading && <p className="text-center text-lg">Updating...</p>}
       </form>
     </div>
   );

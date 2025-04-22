@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useDatabase } from "../_utils/data_context";
 
-export default function AddBook() {
+export default function AddBook({ type }) {
   const [book, setBook] = useState({
     bookId: "",
     title: "",
@@ -46,12 +46,12 @@ export default function AddBook() {
       return;
     }
 
-    addBook(book);
+    addBook(book, type);
     setBook({
-      book_id: "",
+      bookId: "",
       title: "",
       author: "",
-      num_of_pages: 0,
+      numOfPages: 0,
     });
   };
 

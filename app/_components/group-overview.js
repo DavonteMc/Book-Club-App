@@ -13,6 +13,15 @@ export default function GroupOverview({}) {
   const [update, setUpdate] = useState(false);
   const [updateProcessed, setUpdateProcessed] = useState(false);
   const [notes, setNotes] = useState(false);
+  const [selected, setSelected] = useState(null);
+
+  const selectedStyle =
+    "border-emerald-700 border-2 w-52 font-semibold text-white p-1 rounded-lg bg-emerald-900 text-emerald-700" +
+    "hover:bg-emerald-100/80 hover:text-emerald-700 hover:font-semibold transition duration-300";
+
+  const unSelectedStyle =
+    "border-emerald-700 border-2 w-52 font-semibold text-emerald-700 p-1 rounded-lg " +
+    "hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300";
 
   const generateProgress = (currentPage) => {
     if (
@@ -27,18 +36,28 @@ export default function GroupOverview({}) {
   };
 
   const handleUpdateClick = () => {
+    if (notes) {
+      setNotes(false);
+    }
     if (update) {
       setUpdate(false);
+      setSelected(null);
     } else {
       setUpdate(true);
+      setSelected("update");
     }
   };
 
   const handleNotesClick = () => {
+    if (update) {
+      setUpdate(false);
+    }
     if (notes) {
       setNotes(false);
+      setSelected(null);
     } else {
       setNotes(true);
+      setSelected("notes");
     }
   };
 
@@ -52,18 +71,39 @@ export default function GroupOverview({}) {
 
   return (
     <div>
-      <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
+      <div className="flex flex-col w-full mb-4 items-center">
+        <h2 className="text-center text-4xl font-semibold mb-5">
+          {group.name}
+          <br />
+          <span className="text-base font-semibold">
+            Code:{" "}
+            <span className="font-semibold text-emerald-900 text-opacity-80">
+              {group.code}
+            </span>
+          </span>
+        </h2>
+        <h3 className="text-center w-3/4 text-2xl font-medium p-2 mb-4">
+          Club Progress on{" "}
+          <span className="font-semibold text-emerald-700 ">
+            {group.book.title}
+          </span>{" "}
+          <span className="text-xl">by</span>{" "}
+          <span className="font-semibold text-emerald-700">
+            {group.book.author}
+          </span>
+        </h3>
+        {/* Update and Notes Buttons */}
         <div className="space-x-6">
           <button
             type="button"
-            className="rounded-md p-2 bg-slate-700"
+            className={selected === "update" ? selectedStyle : unSelectedStyle}
             onClick={handleUpdateClick}
           >
             Update
           </button>
           <button
             type="button"
-            className="rounded-md p-2 bg-slate-700"
+            className={selected === "notes" ? selectedStyle : unSelectedStyle}
             onClick={handleNotesClick}
           >
             {notes ? "Close Notes" : "View Notes"}
@@ -75,19 +115,20 @@ export default function GroupOverview({}) {
             onUpdate={setUpdate}
           />
         )}
-        {progress.length > 0 && (
-          <div>
+        {notes && <GroupNotes />}
+        {!notes && !update && progress.length > 0 && (
+          <div className="flex flex-col w-full h-full mt-4 items-center">
             {progress.map((member, index) => (
               <ProgressTracker
                 key={index}
                 name={member.name}
                 page={member.currentPage}
                 value={generateProgress(member.currentPage)}
+                total={group.book.num_of_pages}
               />
             ))}
           </div>
         )}
-        {notes && <GroupNotes />}
       </div>
     </div>
   );

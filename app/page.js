@@ -8,6 +8,8 @@ export default function LandingPage() {
   const { user, googleSignIn } = useUserAuth();
   const router = useRouter();
 
+  
+
   useEffect(() => {
     if (user) {
       router.push("/home");
@@ -15,7 +17,7 @@ export default function LandingPage() {
   }, [user]);
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center h-screen bg-neutral-800">
       <h1 className="text-3xl font-bold p-2">Welcome</h1>
       {user ? (
         <div className="flex flex-col gap-6 ">
@@ -24,7 +26,7 @@ export default function LandingPage() {
       ) : (
         <button
           className={
-            "w-1/3 p-2 rounded-xl hover:bg-indigo-600 active:bg-indigo-400 bg-indigo-300 font-semibold"
+            "w-1/3 p-2 rounded-xl hover:bg-emerald-600 active:bg-emerald-400 bg-emerald-800 font-semibold"
           }
           onClick={googleSignIn}
         >

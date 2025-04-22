@@ -17,7 +17,6 @@ export default function HomePage() {
     }
   };
 
-  const handleSignOut = () => {};
 
   useEffect(() => {}, [user]);
 
@@ -30,7 +29,7 @@ export default function HomePage() {
         </p>
         <button
           className={
-            "w-1/3 p-2 rounded-xl hover:bg-indigo-600 active:bg-indigo-400 bg-indigo-300 font-semibold"
+            "w-1/3 p-2 rounded-xl hover:bg-emerald-600 active:bg-emerald-400 bg-emerald-800 font-semibold"
           }
           onClick={googleSignIn}
         >
