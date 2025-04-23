@@ -10,17 +10,17 @@ import {
   CircleMinus,
   BookOpenText,
 } from "lucide-react";
-import NavItem from "../_components/nav-item";
+import NavItem from "../../nav-item";
 import { useState, useEffect } from "react";
-import { useUserAuth } from "../_utils/auth-context";
-import { useDatabase } from "../_utils/data_context";
+import { useUserAuth } from "../../../_utils/auth-context";
+import { useDatabase } from "../../../_utils/data_context";
 import { useRouter } from "next/navigation";
-import PersonalOverview from "../_components/under-development/personal-overview";
-import BackButton from "../_components/back-button";
-import TrackNewBook from "../_components/under-development/track-book";
-import ReadingGoals from "../_components/under-development/reading-goals";
-import WantToRead from "../_components/under-development/want-to-read";
-import ReadBooks from "../_components/under-development/read-books";
+import PersonalOverview from "../personal-overview";
+import BackButton from "../../back-button";
+import TrackNewBook from "../track-book";
+import ReadingGoals from "../reading-goals";
+import WantToRead from "../want-to-read";
+import ReadBooks from "../read-books";
 
 export default function PersonalPage({ onPageChange }) {
   const [page, setPage] = useState("personal-summary");

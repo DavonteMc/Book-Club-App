@@ -1,11 +1,9 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
-import { useUserAuth } from "../_utils/auth-context";
+import { useUserAuth } from "../../../_utils/auth-context";
 
-import PersonalPage from "../personal/personal";
-
+import PersonalPage from "./personal";
 
 export default function HomePage() {
   const [page, setPage] = useState("book-club");
@@ -14,8 +12,7 @@ export default function HomePage() {
   const handlePageChange = () => {
     if (page === "book-club") {
       setPage("personal-summary");
-    } 
-    else {
+    } else {
       setPage("book-club");
     }
   };
@@ -42,9 +39,7 @@ export default function HomePage() {
   }
   return (
     <div>
-        <PersonalPage currentPage={handlePageChange} />
+      <PersonalPage currentPage={handlePageChange} />
     </div>
-  )
-};
-  
-  
+  );
+}
