@@ -4,16 +4,15 @@ import { useState, useEffect } from "react";
 import ProgressTracker from "./progress-tracker";
 import UpdateProgress from "./update-progress";
 import { useDatabase } from "../_utils/data_context";
-import { useUserAuth } from "../_utils/auth-context";
 import GroupNotes from "../_components/group-notes";
 
 export default function GroupOverview({}) {
-  const { user } = useUserAuth();
   const { group, getGroupMemberProgress, progress } = useDatabase();
   const [update, setUpdate] = useState(false);
   const [updateProcessed, setUpdateProcessed] = useState(false);
   const [notes, setNotes] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const selectedStyle =
     "border-emerald-700 border-2 w-52 font-semibold text-white p-1 rounded-lg bg-emerald-900 text-emerald-700" +
@@ -62,17 +61,20 @@ export default function GroupOverview({}) {
   };
 
   useEffect(() => {
+    
     const fetchGroupMembers = async () => {
       await getGroupMemberProgress(group.code);
     };
+    setLoading(true);
     fetchGroupMembers();
+    setLoading(false);
     setUpdateProcessed(false);
   }, [updateProcessed]);
 
   return (
     <div>
       <div className="flex flex-col w-full mb-4 items-center">
-        <h2 className="text-center text-4xl font-semibold mb-5">
+        <h2 className="text-center text-5xl font-semibold mb-5">
           {group.name}
           <br />
           <span className="text-base font-semibold">
@@ -116,6 +118,9 @@ export default function GroupOverview({}) {
           />
         )}
         {notes && <GroupNotes />}
+        {loading && (
+          <p className="text-center text-5xl font-semibold mb-5">Loading...</p>
+        )}
         {!notes && !update && progress.length > 0 && (
           <div className="flex flex-col w-full h-full mt-4 items-center">
             {progress.map((member, index) => (

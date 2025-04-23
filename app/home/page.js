@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
+import { useRouter } from "next/navigation";
 
 import BookClub from "./book-club";
 
 export default function HomePage() {
   const [page, setPage] = useState("book-club");
   const { user, googleSignIn } = useUserAuth();
+  const router = useRouter();
 
   const handlePageChange = () => {
     if (page === "book-club") {
@@ -29,7 +31,7 @@ export default function HomePage() {
         </p>
         <button
           className={
-            "w-1/3 p-2 rounded-xl hover:bg-emerald-600 active:bg-emerald-400 bg-emerald-800 font-semibold"
+            "w-1/3 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
           }
           onClick={googleSignIn}
         >

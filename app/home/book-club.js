@@ -20,10 +20,15 @@ import BackButton from "../_components/back-button";
 
 export default function BookClub({ onPageChange }) {
   const { user, googleSignIn, supabaseSignOut } = useUserAuth();
-  const { group, setGroupStatus, groupStatus } = useDatabase();
+  const { setGroupStatus, groupStatus } = useDatabase();
   const [menu, setMenu] = useState(false);
-
   const router = useRouter();
+
+  const handleLogOut = async () => {
+    await supabaseSignOut();
+    router.push("/");
+  };
+
   const handleMenuToggle = () => {
     if (menu) {
       setMenu(false);
@@ -43,7 +48,7 @@ export default function BookClub({ onPageChange }) {
         </p>
         <button
           className={
-            "w-1/3 p-2 rounded-xl hover:bg-emerald-600 active:bg-emerald-400 bg-emerald-800  font-semibold"
+            "w-1/3 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
           }
           onClick={googleSignIn}
         >
@@ -84,7 +89,7 @@ export default function BookClub({ onPageChange }) {
               </ul>
             </nav>
             <NavItem
-              onLogOut={supabaseSignOut}
+              onLogOut={handleLogOut}
               icon={<LogOut size={18} />}
               label="Logout"
               name={user.user_metadata.full_name}
@@ -107,7 +112,7 @@ export default function BookClub({ onPageChange }) {
         <div className="mb-8">
           {groupStatus === "none" && (
             <div>
-              <h1 className="text-4xl font-bold mb-10 text-center">
+              <h1 className="text-4xl font-bold mt-10 mb-10 text-center">
                 Welcome to your Virtual Book Club
               </h1>
               <h3 className="font-semibold text-emerald-950/80 text-center text-2xl mb-4">

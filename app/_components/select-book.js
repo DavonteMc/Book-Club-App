@@ -21,22 +21,22 @@ export default function SelectExistingBooks({ type }) {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
+    <div className="p-6 ">
       <div className="flex flex-col justify-between gap-4 mb-4">
-        <p className="w-full bg-slate-800 text-center rounded-lg text-lg font-semibold text-white p-1">
-          Choose Books:
+        <p className="w-full text-center text-xl font-semibold p-1">
+          Select a Book:
         </p>
         {loading && <p>Loading...</p>}
         {books.map((book, index) => (
           <button
             key={book.book_id}
             value={book}
-            className="w-full bg-slate-800 rounded-lg text-white p-2 text-left hover:bg-slate-500 hover:text-black"
+            className="border-emerald-700 w-full border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
             onClick={() => {
               handleBookSelection(book);
             }}
           >
-            {index + 1}. {book.title} by {book.author}
+            {book.title} <span className="font-normal">by</span> {book.author}
           </button>
         ))}
       </div>

@@ -21,7 +21,6 @@ export const DataContextProvider = ({ children }) => {
   const [showGroupProgress, setShowGroupProgress] = useState(false);
   const [notes, setNotes] = useState([]);
   const [personalBook, setPersonalBook] = useState(null);
-  
 
   // Create Group Methods -------------------------------------
   const getBooks = async () => {
@@ -84,39 +83,37 @@ export const DataContextProvider = ({ children }) => {
   // Join Group Method -------------------------------------
   const joinGroup = async (e) => {
     e.preventDefault();
-
-    let { data, error } = await supabase.rpc("join_group", {
-      arg_group_code: group.code.trim(),
-      arg_user_id: user.id,
-      arg_user_name: user.user_metadata.full_name,
-    });
-
-    if (error) {
-      console.error("Join group error:", error);
-      alert("Join group error:", error);
-      return;
+    try {
+      let { data, error } = await supabase.rpc("join_group", {
+        arg_group_code: group.code.trim(),
+        arg_user_id: user.id,
+        arg_user_name: user.user_metadata.full_name,
+      });
+      if (error) {
+        throw error;
+      }
+      console.log("Joined group:", data);
+      const book = {
+        book_id: data.book_id,
+        title: data.title,
+        author: data.author,
+        num_of_pages: data.num_of_pages,
+      };
+      const joinedGroup = {
+        code: group.code,
+        name: data.group_name,
+        book: book,
+      };
+      setGroup(joinedGroup);
+      console.log(
+        `Joined group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
+      );
+      alert("Joined Group");
+      setGroupStatus("inGroup");
+    } catch (error) {
+      console.log("Join group error:", error);
+      alert("Join group error:", error.message);
     }
-    console.log("Joined group:", data);
-    const book = {
-      book_id: data.book_id,
-      title: data.title,
-      author: data.author,
-      num_of_pages: data.num_of_pages,
-    };
-    const joinedGroup = {
-      code: group.code,
-      name: data.group_name,
-      book: book,
-    };
-    setGroup(joinedGroup);
-    console.log(
-      `Joined group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
-    );
-    8;
-    alert(
-      `Joined group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
-    );
-    setGroupStatus("inGroup");
   };
 
   // Load Group Methods -------------------------------------
@@ -326,7 +323,7 @@ export const DataContextProvider = ({ children }) => {
         personalBook,
         setPersonalBook,
         setPersonalStatus,
-        personalStatus
+        personalStatus,
       }}
     >
       {children}

@@ -56,15 +56,18 @@ export default function AddBook({ type }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-        <form onSubmit={handleSubmit} className="space-y-2">
+    <div className="p-3 rounded-lg items-center">
+      <p className="w-full text-center text-xl font-semibold p-1">
+        Add a Book:
+      </p>
+      <div className="flex flex-col text-left sm:flex-row ">
+        <form onSubmit={handleSubmit} className="space-y-2 mx-auto items-center">
           {/* Book Title */}
           <p className="text-md font-semibold">Title:</p>
           <input
             type="text"
             value={book.title}
-            className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 py-1 border border-emerald-950 rounded-lg bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-emerald-800"
             onChange={(e) => handleTitleChange(e)}
             placeholder="Enter Book Title"
             required
@@ -74,7 +77,7 @@ export default function AddBook({ type }) {
           <input
             type="text"
             value={book.author}
-            className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full  px-2 py-1 border border-emerald-950 rounded-lg bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-emerald-800"
             onChange={(e) => handleAuthorChange(e)}
             placeholder="Enter the Author's Name"
             required
@@ -84,11 +87,9 @@ export default function AddBook({ type }) {
           <input
             type="text"
             value={book.numOfPages}
-            className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 py-1 border border-emerald-950 rounded-lg bg-neutral-50 focus:outline-none focus:ring-2 mb-2 focus:ring-emerald-800"
             onChange={(e) => handleNumOfPages(e)}
-            placeholder={`Enter the Number of Pages for ${
-              book.title === "" ? "the book" : book.title
-            }`}
+            placeholder="Enter Number of Pages"
             required
           />
           {error && (
@@ -96,7 +97,7 @@ export default function AddBook({ type }) {
           )}
           <button
             type="submit"
-            className="mr-2 bg-sky-300 rounded-lg p-2 place-content-center"
+            className="w-full border-emerald-700 mt-4 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
           >
             Add Book
           </button>

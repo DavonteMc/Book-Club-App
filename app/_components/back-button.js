@@ -21,7 +21,7 @@ export default function BackButton({ page }) {
         onClick={() => handleBackButtonClick()}
       >
         <ChevronLeft size={24} className="mr-1" />
-        <h2 className="font-semibold text-2xl mr-2">Back</h2>
+        <h2 className="font-semibold text-xl mr-2">Back</h2>
       </button>
     </div>
   );
