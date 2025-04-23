@@ -35,13 +35,7 @@ export default function GroupNotes({}) {
   return (
     <div className="mt-6 h-full w-full md:w-1/2 rounded-lg p-3 ">
       <div>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2">
-            <MessageSquare size={24} /> Club Notes
-          </h3>
-        </div>
-
-        <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4">
           {notes.map((member, index) => (
             <div
               key={index}
