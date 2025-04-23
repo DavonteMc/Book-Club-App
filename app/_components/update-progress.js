@@ -77,33 +77,43 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
   };
 
   return (
-    <div >
+    <div className="w-full md:w-1/3">
       <form className="flex w-full flex-col gap-2 mt-6" onSubmit={handleSubmit}>
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row gap-5">
           <p>
             Current Page:{" "}
-            <span className="font-bold">{progressUpdate.currentPage === undefined
-              ? 0
-              : progressUpdate.currentPage}</span>
+            <span className="font-bold">
+              {progressUpdate.currentPage === undefined
+                ? 0
+                : progressUpdate.currentPage}
+            </span>
           </p>
-          <p className="text-center">Set New Current Page:</p>
+          <p className="text-left md:text-center">Set New Current Page:</p>
           <input
             type="text"
             placeholder="Enter page number"
-            className="border border-emerald-950 rounded pb-1 w-14 text-center text-emerald-950 bg-neutral-50"
+            className="border border-emerald-950 rounded-lg pb-1 md:w-14 text-center text-emerald-950 bg-neutral-50"
             onChange={handlePageChange}
             value={progressUpdate.newPage}
           />
         </div>
         {pageError && <p className="text-red-500/80">{errorMessage}</p>}
         <p>Note(s) for Section:</p>
-        <input
-          type="textarea"
-          className="border border-emerald-950 p-3 rounded min-h-5 max-h-10 text-emerald-950 bg-neutral-50"
+        <textarea
+          className="w-full align-top min-h-[100px] md:min-h-[150px] p-3 resize-y 
+            border rounded-lg border-gray-300 
+            placeholder:text-gray-400 text-emerald-950 bg-neutral-50
+            disabled:bg-gray-900 disabled:cursor-not-allowed 
+            transition-colors
+            text-base leading-relaxed"
           onChange={handleNoteChange}
           value={progress.note}
+          placeholder="Enter notes here..."
         />
-        <button type={loading ? "button" : "submit"} className="mt-3 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300">
+        <button
+          type={loading ? "button" : "submit"}
+          className="mt-3 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
+        >
           Update Progress
         </button>
         {loading && <p className="text-center text-lg">Updating...</p>}

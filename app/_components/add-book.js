@@ -56,14 +56,14 @@ export default function AddBook({ type }) {
   };
 
   return (
-    <div className="p-3 rounded-lg items-center">
+    <div className="p-1 md:p-6 rounded-lg items-center">
       <p className="w-full text-center text-xl font-semibold p-1">
         Add a Book:
       </p>
-      <div className="flex flex-col text-left sm:flex-row ">
-        <form onSubmit={handleSubmit} className="space-y-2 mx-auto items-center">
+      <div className="flex-1">
+        <form onSubmit={handleSubmit} className="flex-1 flex-col text-left">
           {/* Book Title */}
-          <p className="text-md font-semibold">Title:</p>
+          <p className="text-md font-semibold mt-4">Title:</p>
           <input
             type="text"
             value={book.title}
@@ -73,7 +73,7 @@ export default function AddBook({ type }) {
             required
           />
           {/* Book Author */}
-          <p className="text-md font-semibold">Author:</p>
+          <p className="text-md font-semibold mt-4">Author:</p>
           <input
             type="text"
             value={book.author}
@@ -83,7 +83,7 @@ export default function AddBook({ type }) {
             required
           />
           {/* Book Number of Pages */}
-          <p className="text-md font-semibold">Number of Pages:</p>
+          <p className="text-md font-semibold mt-4">Number of Pages:</p>
           <input
             type="text"
             value={book.numOfPages}
@@ -97,7 +97,7 @@ export default function AddBook({ type }) {
           )}
           <button
             type="submit"
-            className="w-full border-emerald-700 mt-4 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
+            className="w-full border-emerald-700 border-2 mt-8 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
           >
             Add Book
           </button>

@@ -21,8 +21,8 @@ export default function SelectExistingBooks({ type }) {
   }, []);
 
   return (
-    <div className="p-6 ">
-      <div className="flex flex-col justify-between gap-4 mb-4">
+    <div className="p-2 md:p-6  text-center w-full">
+      <div className="flex flex-col space-y-3 mb-4">
         <p className="w-full text-center text-xl font-semibold p-1">
           Select a Book:
         </p>

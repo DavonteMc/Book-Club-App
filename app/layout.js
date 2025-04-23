@@ -2,6 +2,7 @@ import "./globals.css";
 import { AuthContextProvider } from "./_utils/auth-context";
 import { DataContextProvider } from "./_utils/data_context";
 
+
 export const metadata = {
   title: "Bookie",
   description: "Bookie is a book club app that helps you connect with other readers.",

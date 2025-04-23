@@ -14,14 +14,14 @@ export default function BackButton({ page }) {
     setPersonalStatus("none");
   };
 
-  return (
-    <div className="flex items-center mb-4 ml-3">
+  return ( 
+    <div className="flex items-center absolute left-1 md:ml-9">
       <button
         className="flex items-center hover:text-neutral-900 hover:bg-emerald-950/25 rounded-lg p-1"
         onClick={() => handleBackButtonClick()}
       >
         <ChevronLeft size={24} className="mr-1" />
-        <h2 className="font-semibold text-xl mr-2">Back</h2>
+        <h2 className="font-semibold text-sm md:text-xl mr-2">Back</h2>
       </button>
     </div>
   );

@@ -5,22 +5,20 @@ import ProgressTracker from "./progress-tracker";
 import UpdateProgress from "./update-progress";
 import { useDatabase } from "../_utils/data_context";
 import GroupNotes from "../_components/group-notes";
+import CopyButton from "./copy-button";
 
 export default function GroupOverview({}) {
   const { group, getGroupMemberProgress, progress } = useDatabase();
   const [update, setUpdate] = useState(false);
   const [updateProcessed, setUpdateProcessed] = useState(false);
   const [notes, setNotes] = useState(false);
-  const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const selectedStyle =
-    "border-emerald-700 border-2 w-52 font-semibold text-white p-1 rounded-lg bg-emerald-900 text-emerald-700" +
-    "hover:bg-emerald-100/80 hover:text-emerald-700 hover:font-semibold transition duration-300";
+    "text-white bg-emerald-900 ";
 
   const unSelectedStyle =
-    "border-emerald-700 border-2 w-52 font-semibold text-emerald-700 p-1 rounded-lg " +
-    "hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300";
+    "text-emerald-700 hover:bg-emerald-900 hover:text-white hover:font-semibold ";
 
   const generateProgress = (currentPage) => {
     if (
@@ -37,31 +35,32 @@ export default function GroupOverview({}) {
   const handleUpdateClick = () => {
     if (notes) {
       setNotes(false);
+      setUpdate(true);
+      return;
     }
     if (update) {
       setUpdate(false);
-      setSelected(null);
-    } else {
-      setUpdate(true);
-      setSelected("update");
+      setNotes(false);
+      return;
     }
+    setUpdate(true);
   };
 
   const handleNotesClick = () => {
     if (update) {
       setUpdate(false);
+      setNotes(true);
+      return;
     }
     if (notes) {
       setNotes(false);
-      setSelected(null);
-    } else {
-      setNotes(true);
-      setSelected("notes");
+      setUpdate(false);
+      return;
     }
+    setNotes(true);
   };
 
   useEffect(() => {
-    
     const fetchGroupMembers = async () => {
       await getGroupMemberProgress(group.code);
     };
@@ -74,14 +73,10 @@ export default function GroupOverview({}) {
   return (
     <div>
       <div className="flex flex-col w-full mb-4 items-center">
-        <h2 className="text-center text-5xl font-semibold mb-5">
+        <h2 className="flex flex-col space-y-1 text-center text-3xl md:text-5xl font-semibold mb-5">
           {group.name}
-          <br />
-          <span className="text-base font-semibold">
-            Code:{" "}
-            <span className="font-semibold text-emerald-900 text-opacity-80">
-              {group.code}
-            </span>
+          <span className="text-xs md:text-base font-semibold">
+            <CopyButton textToCopy={group.code} />
           </span>
         </h2>
         <h3 className="text-center w-3/4 text-2xl font-medium p-2 mb-4">
@@ -94,18 +89,43 @@ export default function GroupOverview({}) {
             {group.book.author}
           </span>
         </h3>
-        {/* Update and Notes Buttons */}
-        <div className="space-x-6">
+        {/* Update and Notes Buttons - Desktop*/}
+        <div className="w-1/2 text-center space-x-4 hidden md:block">
           <button
             type="button"
-            className={selected === "update" ? selectedStyle : unSelectedStyle}
+            className={`w-2/5 md:w-1/4 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+              update ? selectedStyle : unSelectedStyle
+            }`}
             onClick={handleUpdateClick}
           >
             Update
           </button>
           <button
             type="button"
-            className={selected === "notes" ? selectedStyle : unSelectedStyle}
+            className={`w-2/5 md:w-1/4 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+              notes ? selectedStyle : unSelectedStyle
+            }`}
+            onClick={handleNotesClick}
+          >
+            {notes ? "Close Notes" : "View Notes"}
+          </button>
+        </div>
+        {/* Update and Notes Buttons - Mobile*/}
+        <div className="w-full text-center space-x-6 md:hidden">
+          <button
+            type="button"
+            className={`w-2/5 md:w-1/3 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+              update ? selectedStyle : unSelectedStyle
+            }`}
+            onClick={handleUpdateClick}
+          >
+            Update
+          </button>
+          <button
+            type="button"
+            className={`w-2/5 md:w-1/3 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+              notes ? selectedStyle : unSelectedStyle
+            }`}
             onClick={handleNotesClick}
           >
             {notes ? "Close Notes" : "View Notes"}
