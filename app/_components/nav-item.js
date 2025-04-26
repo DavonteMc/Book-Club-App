@@ -6,52 +6,34 @@ export default function NavItem({
   onPageChange,
   currentPage,
   onLogOut,
-  name,
-  className,
-  mobile,
+  name
 }) {
-  const activePage =
-    currentPage === "home" && label === "Book Club"
-      ? "font-bold underline underline-offset-8"
-      : currentPage === "personal" && label === "Personal Summary"
-      ? "font-bold underline underline-offset-8"
-      : "";
 
-  if (mobile) {
-    return (
-      <div className={`flex items-center space-x-2`}>
-        <Link href={currentPage === "home" ? "/personal" : "/home"}>
-          <li
-            className={`flex items-center space-x-2 p-2 
-          rounded-lg  
-         ${activePage}
-            font-semibold px-2 py-1 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300 cursor-pointer`}
-            onClick={label === "Logout" ? onLogOut : onPageChange}
-          >
-            {icon}
-            <span>{label}</span>
-          </li>
-        </Link>
-      </div>
-    );
-  }
+  const getActiveSideBar = () => {
+    if (currentPage === "home" && label === "Book Club") {
+      return "font-bold underline underline-offset-8";
+    } 
+    if (currentPage === "personal" && label === "Personal Summary") {
+      return "font-bold underline underline-offset-8";
+    } 
+    
+  };
+
   return (
-    <div className={`flex items-center space-x-2`}>
-      <p className="text-sm italic font-semibold underline underline-offset-8">
-        {name}
-      </p>
-      <Link href={currentPage === "home" ? "/personal" : "/home"}>
+    <div className="flex items-center space-x-2">
+      <p className="text-sm italic font-semibold">{name}</p>
+      <button type="button">
         <li
           className={`flex items-center space-x-2 p-2 
           rounded-lg  
-         ${activePage}
-            font-semibold px-2 py-1 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300 cursor-pointer`}
+         ${getActiveSideBar()}
+            font-semibold px-4 py-2 rounded-lg hover:bg-emerald-900/90 hover:text-white hover:font-semibold transition duration-300 cursor-pointer`}
           onClick={label === "Logout" ? onLogOut : onPageChange}
         >
           {icon}
           <span>{label}</span>
         </li>
-      </Link>
+      </button>
     </div>
   );
 }

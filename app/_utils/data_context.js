@@ -172,49 +172,28 @@ export const DataContextProvider = ({ children }) => {
     setGroup(joinedGroup);
     setGroupStatus("inGroup");
     console.log(
-      `Joined group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
+      `Loaded group: ${joinedGroup.code}\n${joinedGroup.name}\n${joinedGroup.book.title} by ${joinedGroup.book.author}`
     );
   };
 
   // Group Overview Methods -------------------------------------
-  const getGroupMembers = async (groupCode) => {
-    let { data, error } = await supabase
-      .from("group_members")
-      .select("user_id")
-      .eq("group_code", groupCode);
+  const getGroupMemberProgress = async () => {
+    const { data, error } = await supabase.rpc("get_group_progress", {
+      arg_group_code: group.code,
+      arg_book_id: group.book.book_id,
+    });
 
     if (error) {
-      console.error("Error fetching group members:", error);
-      return null;
+      console.error("Error fetching group progress:", error);
+      return;
     }
-    console.log("Fetched group members:", data);
-    return data;
-  };
 
-  const getGroupMemberProgress = async () => {
-    let members = await getGroupMembers(group.code);
-    if (members === null) return;
+    const groupMembers = data.map((entry) => ({
+      name: entry.member_name,
+      currentPage: entry.current_pg,
+      date: entry.date,
+    }));
 
-    const groupMembers = [];
-
-    for (let i = 0; i < members.length; i++) {
-      let { data, error } = await supabase.rpc("get_member_progress", {
-        arg_book_id: group.book.book_id,
-        arg_user_id: members[i].user_id,
-      });
-      if (error) {
-        console.error("Error fetching group member progress:", error);
-      } else {
-        console.log("Fetched group member progress:", data);
-        let member = {
-          name: data.member_name,
-          currentPage: data.current_pg,
-          date: data.date,
-        };
-        console.log("Member progress:", member);
-        groupMembers.push(member);
-      }
-    }
     setProgress(groupMembers);
   };
 
@@ -243,15 +222,7 @@ export const DataContextProvider = ({ children }) => {
     if (error) {
       console.error("Error fetching groups:", error);
     }
-    const date = new Date("2025-04-21T17:43:47.647169+00:00");
-    const formattedDate = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      timeZone: "UTC",
-    });
+
     const groupNotes = data.map((member) => {
       return {
         member_name: member.member_name,
@@ -293,6 +264,17 @@ export const DataContextProvider = ({ children }) => {
       console.log("Member progress:", member);
     }
   };
+
+  useEffect(() => {
+    const handleInitialLoad = () => {
+      if (window.history.state?.isBookClubSubpage) {
+        window.history.replaceState(null, "");
+        setGroupStatus("none");
+      }
+    };
+
+    handleInitialLoad();
+  }, [setGroupStatus]);
 
   return (
     <DataContext.Provider

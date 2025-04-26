@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
-import { useRouter } from "next/navigation";
-
+import { useDatabase } from "../_utils/data_context";
 import BookClub from "./book-club";
 
 export default function HomePage() {
@@ -18,6 +17,7 @@ export default function HomePage() {
     }
   };
 
+  
 
   useEffect(() => {}, [user]);
 

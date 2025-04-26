@@ -1,43 +1,48 @@
 "use client";
 
-import {
-  BookOpen,
-  NotebookPen,
-  LogOut,
-  BookOpenText,
-  Menu,
-} from "lucide-react";
-import NavItem from "../_components/nav-item";
+
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { useDatabase } from "../_utils/data_context";
-import { useRouter } from "next/navigation";
 import CreateGroup from "../_components/create-group";
 import JoinGroup from "../_components/join-group";
 import GroupOverview from "../_components/group-overview";
 import LoadGroup from "../_components/load-group";
-import BackButton from "../_components/back-button";
+import Header from "../_components/header";
 
 export default function BookClub({ onPageChange }) {
-  const { user, googleSignIn, supabaseSignOut } = useUserAuth();
+  const { user, googleSignIn } = useUserAuth();
   const { setGroupStatus, groupStatus } = useDatabase();
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const router = useRouter();
-
-  const handleLogOut = async () => {
-    await supabaseSignOut();
-    router.push("/");
-  };
-
-  const handleMenuToggle = () => {
-    if (mobileMenu) {
-      setMobileMenu(false);
-      return;
-    }
-    setMobileMenu(true);
-  };
 
   useEffect(() => {}, [user]);
+
+  useEffect(() => {
+    const handleBackNavigation = (event) => {
+      if (groupStatus !== "none") {
+        // Reset to main view
+        setGroupStatus("none");
+        // Maintain clean history
+        if (event.state?.isBookClubSubpage) {
+          window.history.replaceState(null, "");
+        }
+      }
+    };
+
+    // Add custom history entry when entering sub-pages
+    if (groupStatus !== "none") {
+      window.history.pushState({ isBookClubSubpage: true }, groupStatus);
+    }
+
+    window.addEventListener("popstate", handleBackNavigation);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackNavigation);
+      // Clean up history when unmounting
+      if (window.history.state?.isBookClubSubpage) {
+        window.history.replaceState(null, "");
+      }
+    };
+  }, [groupStatus, setGroupStatus]);
 
   if (!user) {
     return (
@@ -57,62 +62,10 @@ export default function BookClub({ onPageChange }) {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="sticky top-0 bg-white shadow-md z-50 px-4">
-        <div className="container mx-auto">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo Section */}
-            <div>
-              <button
-                type="button"
-                onClick={() => setGroupStatus("none")}
-                className="flex items-center space-x-3"
-              >
-                <BookOpenText size={30} className="text-emerald-800" />
-                <h1 className="text-2xl font-bold text-gray-800">Bookie</h1>
-              </button>
-            </div>
-
-            {/* Navigation - Desktop */}
-            <nav className="hidden md:block">
-              <ul className="flex space-x-4">
-                <div className="flex items-center space-x-4">
-                  <NavItem
-                    onPageChange={onPageChange}
-                    currentPage={"home"}
-                    icon={<BookOpen size={18} />}
-                    label="Book Club"
-                  />
-                  <NavItem
-                    onPageChange={onPageChange}
-                    currentPage={"home"}
-                    icon={<NotebookPen size={18} />}
-                    label="Personal Summary"
-                  />
-                  <NavItem
-                    onLogOut={handleLogOut}
-                    icon={<LogOut size={18} />}
-                    label="Logout"
-                    name={user.user_metadata.full_name}
-                    className="flex place-items-end"
-                  />
-                </div>
-              </ul>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
-              onClick={handleMenuToggle}
-            >
-              <Menu size={24} className="text-gray-600" />
-            </button>
-          </div>
-        </div>
-      </header>
+      <Header onPageChange={ onPageChange }/>
 
       {/* Main Content */}
       <main className="flex-1 px-8 py-4 overflow-y-auto ">
-        {groupStatus !== "none" && <BackButton page="group" />}
         {/* Group Progress Section */}
         <div className="mb-8">
           {groupStatus === "none" && (
@@ -163,43 +116,6 @@ export default function BookClub({ onPageChange }) {
           )}
         </div>
       </main>
-      {mobileMenu && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={handleMenuToggle}
-        >
-          <div className="absolute right-0 top-16 w-2/3 h-full bg-neutral-100 p-4 shadow-lg flex flex-col">
-            <p className="text-sm italic text-center font-semibold mb-8">
-              {user.user_metadata.full_name}
-            </p>
-
-            <div className="flex flex-col space-y-4">
-              <NavItem
-                onPageChange={onPageChange}
-                currentPage={"home"}
-                icon={<BookOpen size={20} />}
-                label="Book Club"
-              />
-
-              <NavItem
-                onPageChange={onPageChange}
-                currentPage={"home"}
-                icon={<NotebookPen size={20} />}
-                label="Personal Summary"
-              />
-              <div className="mb-24"></div>
-              <div className="mt-24 pt-4 border-t border-emerald-900">
-                <NavItem
-                  onLogOut={handleLogOut}
-                  icon={<LogOut size={18} />}
-                  label="Logout"
-                  mobile={true}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -61,7 +61,7 @@ export default function GroupOverview({}) {
 
   useEffect(() => {
     const fetchGroupMembers = async () => {
-      await getGroupMemberProgress(group.code);
+      await getGroupMemberProgress();
     };
     setLoading(true);
     fetchGroupMembers();
@@ -78,8 +78,8 @@ export default function GroupOverview({}) {
             <CopyButton textToCopy={group.code} />
           </span>
         </h2>
-        <h3 className="w-full text-left text-base md:text-2xl font-medium py-2 mb-4">
-          Club Progress on{" "}
+        <h3 className="w-full text-center text-base md:text-2xl font-medium py-2 mb-12">
+          Progress on:{" "}
           <span className="font-semibold text-emerald-700 ">
             {group.book.title}
           </span>{" "}
