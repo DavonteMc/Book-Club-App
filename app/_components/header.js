@@ -34,7 +34,7 @@ export default function Header({ onPageChange }) {
 
   return (
     <div>
-      <header className="sticky top-0 bg-white shadow-md z-50 px-4 md:px-0">
+      <header className="sticky top-0 bg-white shadow-md z-50 px-4 md:px-2">
         <div className="container mx-auto">
           <div className="flex items-center h-16">
             {/* Logo Section */}
