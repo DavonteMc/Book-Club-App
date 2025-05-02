@@ -1,88 +1,60 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import ProgressTracker from "../progress-tracker";
-import UpdateProgress from "../update-progress";
-import { useDatabase } from "../../_utils/data_context";
-import { useUserAuth } from "../../_utils/auth-context";
-import GroupNotes from "../group-notes";
-import AddBook from "../add-book";
-import SelectExistingBooks from "../select-book";
+import { useState } from "react";
+import TrackNewBook from "./track-new-book";
+import LoadBooks from "./load-tracked-books";
 
 export default function PersonalOverview() {
-  const { user } = useUserAuth();
-  const { personalBook } = useDatabase();
-  const [update, setUpdate] = useState(false);
-  const [notes, setNotes] = useState(false);
-  const [newBook, setNewBook] = useState(false);
+  const [bookSelectionMethod, setBookSelectionMethod] = useState("none");
 
-  const handleNewBookClick = async () => {
-    if (newBook) {
-      setNewBook(false);
-    } else {
-      setNewBook(true);
-    }
-  };
+  const selectedStyle =
+    "border-emerald-700 border-2 w-2/5 md:w-1/4 h-10 text-base md:text-xl font-semibold text-white p-1 rounded-lg bg-emerald-900 text-emerald-700" +
+    " transition duration-300";
 
-  const handleUpdateClick = () => {
-    if (update) {
-      setUpdate(false);
-    } else {
-      setUpdate(true);
-    }
-  };
-
-  const handleNotesClick = () => {
-    if (notes) {
-      setNotes(false);
-    } else {
-      setNotes(true);
-    }
-  };
-
-  useEffect(() => {}, []);
+  const unSelectedStyle =
+    "border-emerald-700 border-2 w-2/5 md:w-1/4 h-10 text-base md:text-xl font-semibold text-emerald-700 p-1 rounded-lg " +
+    "hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300";
 
   return (
-    <div>
-      <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
-        <div>
-          <button
-            type="button"
-            className="rounded-md p-2 bg-slate-700"
-            onClick={handleNewBookClick}
-          >
-            Track New Book
-          </button>
-        </div>
+    <div className="mb-8 w-full">
+      <div className="flex w-full flex-col items-center mb-4">
+        <h3 className="text-3xl md:text-5xl text-center mb-5 font-bold">
+          Personal Progress
+          <p className="text-center text-sm md:text-lg mt-2 text-emerald-950/70 font-semibold">
+            Track your progress on the book you are reading. You can either load
+            an existing book or track a new one.
+          </p>
+        </h3>
 
-        {personalBook !== null && (
-          <div>
-            <div className="space-x-6">
-              <button
-                type="button"
-                className="rounded-md p-2 bg-slate-700"
-                onClick={handleUpdateClick}
-              >
-                Update
-              </button>
-              <button
-                type="button"
-                className="rounded-md p-2 bg-slate-700"
-                onClick={handleNotesClick}
-              >
-                {notes ? "Close Notes" : "View Notes"}
-              </button>
-            </div>
-            {update && <UpdateProgress />}
-            <ProgressTracker
-              name={user.user_metadata.full_name}
-              page={13}
-              value={55}
-            />
+        {/* Book Selection Method Buttons*/}
+        <div className="w-full flex-col p-1 mb-8 text-center rounded-lg">
+          <div className="w-full space-x-6 items-center text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setBookSelectionMethod("load");
+              }}
+              className={
+                bookSelectionMethod === "load" ? selectedStyle : unSelectedStyle
+              }
+            >
+              Load Books
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setBookSelectionMethod("new");
+              }}
+              className={
+                bookSelectionMethod === "new" ? selectedStyle : unSelectedStyle
+              }
+            >
+              New Book
+            </button>
           </div>
-        )}
-
-        {notes && <GroupNotes />}
+          <div className="border-b mt-7 border-emerald-950"></div>
+          {bookSelectionMethod === "load" && <LoadBooks />}
+          {bookSelectionMethod === "new" && <TrackNewBook onTrackedBook={setBookSelectionMethod}/>}
+        </div>
       </div>
     </div>
   );

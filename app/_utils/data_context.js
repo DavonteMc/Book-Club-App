@@ -24,6 +24,7 @@ export const DataContextProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [personalBook, setPersonalBook] = useState(null);
   const [personalBooks, setPersonalBooks] = useState([]);
+  const [personalNotes, setPersonalNotes] = useState([]);
 
   // Create Group Methods -------------------------------------
   const getBooks = async () => {
@@ -58,8 +59,10 @@ export const DataContextProvider = ({ children }) => {
       console.log("Selected book:", group.book);
       return;
     }
-    setPersonalBook(newBook);
-    console.log("Selected book:", personalBook);
+    if (type === "personal") {
+      updateProgress(0, null, newBook.book_id, true);
+    }
+    console.log("Added tracked book:", newBook);
   };
 
   const createNewGroup = async (e) => {
@@ -201,12 +204,15 @@ export const DataContextProvider = ({ children }) => {
   };
 
   // Update Progress Method -------------------------------------
-  const updateProgress = async (newPage, note) => {
+  const updateProgress = async (newPage, note, updateId, type) => {
+    const bookId = type === "group" ? group.book.book_id : updateId;
+    const bookType = type === "group" ? false : true;
     let { error } = await supabase.rpc("add_progress", {
-      arg_book_id: group.book.book_id,
+      arg_book_id: bookId,
       arg_new_page: newPage,
       arg_note: note,
       arg_user_id: user.id,
+      arg_book_type: bookType,
     });
     if (error) console.error(error);
     else {
@@ -219,12 +225,9 @@ export const DataContextProvider = ({ children }) => {
     let { data, error } = await supabase.rpc("get_group_notes", {
       arg_group_code: group.code,
     });
-    if (error) console.error(error);
-    else console.log(data);
-
     if (error) {
-      console.error("Error fetching groups:", error);
-    }
+      console.error("Error fetching group notes:", error);
+    } else console.log(data);
 
     const groupNotes = data.map((member) => {
       return {
@@ -247,14 +250,14 @@ export const DataContextProvider = ({ children }) => {
     setNotes(groupNotes);
   };
 
-  // Personal Progress Method -------------------------------------
+  // Personal Books/Progress Method -------------------------------------
   const getPersonalBooks = async () => {
     let { data, error } = await supabase.rpc("get_personal_books", {
       arg_user_id: user.id,
     });
     if (error) {
       console.error(error);
-      return -1;
+      return false;
     } else {
       const returnedBooks = data.map((book) => {
         return {
@@ -272,33 +275,40 @@ export const DataContextProvider = ({ children }) => {
             minute: "2-digit",
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           }),
-        }
+        };
       });
       console.log("Fetched personal books:", returnedBooks);
-      if (returnedBooks.length === 0) {
-        return 0;
-      }
       setPersonalBooks(returnedBooks);
-      return 1;
+      return true;
     }
   };
 
-  const getPersonalProgress = async () => {
-    let { data, error } = await supabase.rpc("get_member_progress", {
-      arg_book_id: group.book.book_id,
-      arg_user_id: members[i].user_id,
+  // Personal Notes Method -------------------------------------
+  const getPersonalNotes = async (bookId) => {
+    let { data, error } = await supabase.rpc("get_personal_notes", {
+      arg_book_id: bookId,
+      arg_user_id: user.id,
     });
     if (error) {
-      console.error("Error fetching group member progress:", error);
-    } else {
-      console.log("Fetched group member progress:", data);
-      let member = {
-        name: data.member_name,
-        currentPage: data.current_pg,
-        date: data.date,
+      console.error("Error fetching personal notes:", error);
+    } else console.log(data);
+
+    const returnedNotes = data.map((note) => {
+      return {
+        current_pg: note.current_pg,
+        date: new Date(note.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        }),
+        note: note.note,
       };
-      console.log("Member progress:", member);
-    }
+    });
+    console.log("Fetched Personal Notes:", returnedNotes);
+    setPersonalNotes(returnedNotes);
   };
 
   useEffect(() => {
@@ -353,7 +363,10 @@ export const DataContextProvider = ({ children }) => {
         setPersonalBook,
         setPersonalStatus,
         personalStatus,
+        personalBooks,
         getPersonalBooks,
+        getPersonalNotes,
+        personalNotes,
       }}
     >
       {children}

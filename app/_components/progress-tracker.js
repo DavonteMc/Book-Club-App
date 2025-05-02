@@ -1,11 +1,11 @@
 export default function ProgressTracker({ name, value, page, total }) {
   return (
-    <div className="mb-3 py-3 w-full md:w-3/4">
+    <div className="py-5 px-5 w-full">
       <p className="text-base md:text-xl font-semibold">{name}</p>
       <div className="flex justify-between mb-1">
         <p className="text-sm md:text-lg">
-          pg.<span className="italic">{page === undefined ? 0 : page}</span> of{" "}
-          <span className="italic">{total}</span>
+          pg.<span className="font-semibold">{page === undefined ? 0 : page}</span> of{" "}
+          <span className="font-semibold">{total}</span>
         </p>
         <p className="text-base md:text-xl font-bold">{value}%</p>
       </div>

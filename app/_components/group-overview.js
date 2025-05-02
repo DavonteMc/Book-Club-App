@@ -14,10 +14,13 @@ export default function GroupOverview({}) {
   const [notes, setNotes] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const selectedStyle = "text-white bg-emerald-900 ";
+  const selectedStyle =
+    "border-emerald-700 border-2 w-3/4 md:w-1/3 h-10 text-xs md:text-base font-semibold text-white p-1 rounded-lg bg-emerald-900 text-emerald-700" +
+    " transition duration-300";
 
   const unSelectedStyle =
-    "text-emerald-700 hover:bg-emerald-900 hover:text-white hover:font-semibold ";
+    "border-emerald-700 border-2 w-3/4 md:w-1/3 h-10 text-xs md:text-base font-semibold text-emerald-700 p-1 rounded-lg " +
+    "hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300";
 
   const generateProgress = (currentPage) => {
     if (
@@ -78,7 +81,7 @@ export default function GroupOverview({}) {
             <CopyButton textToCopy={group.code} />
           </span>
         </h2>
-        <h3 className="w-full text-center text-base md:text-2xl font-medium py-2 mb-12">
+        <h3 className="w-full text-center text-base md:text-2xl font-medium py-2 mb-3 md:mb-12">
           Progress on:{" "}
           <span className="font-semibold text-emerald-700 ">
             {group.book.title}
@@ -88,43 +91,21 @@ export default function GroupOverview({}) {
             {group.book.author}
           </span>
         </h3>
-        {/* Update and Notes Buttons - Desktop*/}
-        <div className="w-1/2 text-center space-x-4 hidden md:block">
+        <div className="w-full flex-col md:flex-row items-center md:w-2/5 space-y-2 md:space-x-3 p-2 mb-2 md:mb-8 text-center rounded-lg">
           <button
             type="button"
-            className={`w-2/5 md:w-1/4 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+            className={
               update ? selectedStyle : unSelectedStyle
-            }`}
+            }
             onClick={handleUpdateClick}
           >
             {update ? "Close" : "Update Progress"}
           </button>
           <button
             type="button"
-            className={`w-2/5 md:w-1/4 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+            className={
               notes ? selectedStyle : unSelectedStyle
-            }`}
-            onClick={handleNotesClick}
-          >
-            {notes ? "Close" : "View Notes"}
-          </button>
-        </div>
-        {/* Update and Notes Buttons - Mobile*/}
-        <div className="w-full text-center space-x-6 md:hidden">
-          <button
-            type="button"
-            className={`w-2/5 md:w-1/3 text-xs md:text-base border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
-              update ? selectedStyle : unSelectedStyle
-            }`}
-            onClick={handleUpdateClick}
-          >
-            {update ? "Close" : "Update Progress"}
-          </button>
-          <button
-            type="button"
-            className={`w-2/5 md:w-1/3 text-xs md:text-base border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
-              notes ? selectedStyle : unSelectedStyle
-            }`}
+            }
             onClick={handleNotesClick}
           >
             {notes ? "Close" : "View Notes"}
@@ -143,13 +124,18 @@ export default function GroupOverview({}) {
         {!notes && !update && progress.length > 0 && (
           <div className="flex flex-col w-full h-full mt-5 items-center">
             {progress.map((member, index) => (
-              <ProgressTracker
+              <div
+                className="w-full md:w-3/4 mb-3 shadow-lg border border-neutral-900/30 shadow-neutral-900/10 rounded-xl"
                 key={index}
-                name={member.name}
-                page={member.currentPage}
-                value={generateProgress(member.currentPage)}
-                total={group.book.num_of_pages}
-              />
+              >
+                <ProgressTracker
+                  key={index}
+                  name={member.name}
+                  page={member.currentPage}
+                  value={generateProgress(member.currentPage)}
+                  total={group.book.num_of_pages}
+                />
+              </div>
             ))}
           </div>
         )}
