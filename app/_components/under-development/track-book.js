@@ -8,89 +8,55 @@ import SelectExistingBooks from "../select-book";
 export default function TrackNewBook() {
   const [bookSelectionMethod, setBookSelectionMethod] = useState("add-new");
 
-  const { group, setGroup, createNewGroup, selectedBook, setSelectedBook } =
-    useDatabase();
+  const {
+    group,
+    setGroup,
+    createNewGroup,
+    selectedBook,
+    setSelectedBook,
+    personalBook,
+    setPersonalBook,
+  } = useDatabase();
 
   return (
     <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg ">
       <div className="flex flex-col justify-between gap-4 mb-4">
-        <p className="text-3xl">Under Development</p>
-        <div className="flex  gap-4 mb-4">
-          {/* Book Selection Method Buttons*/}
-          {group.book === null && (
-            <div className="space-y-2 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg">
-              <h3 className="text-lg font-bold">Book Selection</h3>
-              <button
-                type="button"
-                onClick={() => {
-                  setBookSelectionMethod("add-new");
-                }}
-                className={`mr-2 shadow-neutral-700 shadow-inner ${
-                  bookSelectionMethod === "add-new"
-                    ? "bg-neutral-700 bg-opacity-35 font-bold"
-                    : ""
-                }  rounded-lg p-2 px-4`}
-              >
-                Add New Book
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setBookSelectionMethod("existing");
-                }}
-                className={`mr-2 shadow-neutral-700 shadow-inner ${
-                  bookSelectionMethod === "existing"
-                    ? "bg-neutral-700 bg-opacity-35 font-bold"
-                    : ""
-                }  rounded-lg p-2 px-4`}
-              >
-                Existing Books
-              </button>
-              {bookSelectionMethod === "add-new" && <AddBook type="group" />}
-              {bookSelectionMethod === "existing" && (
-                <SelectExistingBooks type="group" />
-              )}
-            </div>
-          )}
-
-          {group.book != null && (
-            <div className="space-y-2 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg">
-              {/* Back Button */}
-              <div className="flex items-center mb-2">
-                <button
-                  className=" hover:text-neutral-900 flex items-center"
-                  onClick={() => setGroup({ ...group, book: null })}
-                >
-                  <ChevronLeft size={18} className="mr-2" />
-                </button>
-                <h2 className="text-lg font-bold">Book Club Name</h2>
-              </div>
-
-              <form onSubmit={createNewGroup} className="space-y-2 ml-6">
-                {/* Book Club Group Name */}
-                <input
-                  type="text"
-                  value={group.name}
-                  className="w-full px-2 py-1 border-neutral-700 border bg-neutral-400 bg-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500"
-                  onChange={(e) => setGroup({ ...group, name: e.target.value })}
-                  placeholder="Enter Group Name"
-                  required
-                />
-                {/* Book Selection */}
-                <p className="text-md font-semibold">Selected Book:</p>
-                <p className="text-md italic">
-                  {group.book.title} by {group.book.author}
-                </p>
-                <button
-                  type="submit"
-                  className="mr-2 bg-sky-300 rounded-lg p-2 place-content-center"
-                >
-                  Create Group
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
+        {/* Book Selection Method Buttons*/}
+        {personalBook === null && (
+          <div className="space-y-2 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg">
+            <h3 className="text-lg font-bold">Book Selection</h3>
+            <button
+              type="button"
+              onClick={() => {
+                setBookSelectionMethod("add-new");
+              }}
+              className={`mr-2 shadow-neutral-700 shadow-inner ${
+                bookSelectionMethod === "add-new"
+                  ? "bg-neutral-700 bg-opacity-35 font-bold"
+                  : ""
+              }  rounded-lg p-2 px-4`}
+            >
+              Add New Book
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setBookSelectionMethod("existing");
+              }}
+              className={`mr-2 shadow-neutral-700 shadow-inner ${
+                bookSelectionMethod === "existing"
+                  ? "bg-neutral-700 bg-opacity-35 font-bold"
+                  : ""
+              }  rounded-lg p-2 px-4`}
+            >
+              Existing Books
+            </button>
+            {bookSelectionMethod === "add-new" && <AddBook type="personal" />}
+            {bookSelectionMethod === "existing" && (
+              <SelectExistingBooks type="personal" />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

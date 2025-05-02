@@ -97,7 +97,7 @@ export default function GroupOverview({}) {
             }`}
             onClick={handleUpdateClick}
           >
-            Update
+            {update ? "Close" : "Update Progress"}
           </button>
           <button
             type="button"
@@ -106,7 +106,7 @@ export default function GroupOverview({}) {
             }`}
             onClick={handleNotesClick}
           >
-            {notes ? "Close Notes" : "View Notes"}
+            {notes ? "Close" : "View Notes"}
           </button>
         </div>
         {/* Update and Notes Buttons - Mobile*/}
@@ -118,7 +118,7 @@ export default function GroupOverview({}) {
             }`}
             onClick={handleUpdateClick}
           >
-            Update
+            {update ? "Close" : "Update Progress"}
           </button>
           <button
             type="button"
@@ -127,7 +127,7 @@ export default function GroupOverview({}) {
             }`}
             onClick={handleNotesClick}
           >
-            {notes ? "Close Notes" : "View Notes"}
+            {notes ? "Close" : "View Notes"}
           </button>
         </div>
         {update && (

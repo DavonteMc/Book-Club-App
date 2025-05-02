@@ -12,17 +12,12 @@ import { useDatabase } from "../_utils/data_context";
 import { useUserAuth } from "../_utils/auth-context";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useApp } from "../_utils/app-context";
 
-export default function Header({ onPageChange }) {
-  const { user, supabaseSignOut } = useUserAuth();
-  const { setGroupStatus } = useDatabase();
+export default function Header() {
+  const { user } = useUserAuth();
+  const { setGroupStatus } = useApp();
   const [mobileMenu, setMobileMenu] = useState(false);
-  const router = useRouter();
-
-  const handleLogOut = async () => {
-    await supabaseSignOut();
-    router.push("/");
-  };
 
   const handleMenuToggle = () => {
     if (mobileMenu) {
@@ -38,7 +33,7 @@ export default function Header({ onPageChange }) {
         <div className="container mx-auto">
           <div className="flex items-center h-16">
             {/* Logo Section */}
-            <div>
+            <div className="mr-4">
               <button
                 type="button"
                 onClick={() => setGroupStatus("none")}
@@ -52,16 +47,9 @@ export default function Header({ onPageChange }) {
             {/* Navigation - Desktop */}
             <nav className="hidden md:block flex-grow ml-auto">
               <ul className="flex">
-                <div className="flex items-center">
+                <div className="ml-2 flex items-center space-x-4">
+                  <NavItem icon={<BookOpen size={18} />} label="Book Club" />
                   <NavItem
-                    onPageChange={onPageChange}
-                    currentPage={"home"}
-                    icon={<BookOpen size={18} />}
-                    label="Book Club"
-                  />
-                  <NavItem
-                    onPageChange={onPageChange}
-                    currentPage={"home"}
                     icon={<NotebookPen size={18} />}
                     label="Personal Summary"
                   />
@@ -69,10 +57,10 @@ export default function Header({ onPageChange }) {
 
                 <div className="flex ml-auto">
                   <NavItem
-                    onLogOut={handleLogOut}
                     icon={<LogOut size={18} />}
                     label="Logout"
                     name={user.user_metadata.full_name}
+                    desktop={true}
                   />
                 </div>
               </ul>
@@ -99,26 +87,19 @@ export default function Header({ onPageChange }) {
             </p>
 
             <div className="flex flex-col space-y-4">
-              <NavItem
-                onPageChange={onPageChange}
-                currentPage={"home"}
-                icon={<BookOpen size={20} />}
-                label="Book Club"
-              />
+              <NavItem icon={<BookOpen size={20} />} label="Book Club" />
 
               <NavItem
-                onPageChange={onPageChange}
-                currentPage={"home"}
                 icon={<NotebookPen size={20} />}
                 label="Personal Summary"
               />
               <div className="mb-24"></div>
               <div className="mt-24 pt-4 border-t border-emerald-900">
                 <NavItem
-                  onLogOut={handleLogOut}
                   icon={<LogOut size={18} />}
                   label="Logout"
                   mobile={true}
+                  name={user.user_metadata.full_name}
                 />
               </div>
             </div>

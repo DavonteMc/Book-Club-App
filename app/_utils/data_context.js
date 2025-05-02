@@ -1,26 +1,29 @@
 "use client";
 import { useUserAuth } from "./auth-context";
+import { useApp } from "./app-context";
 import { useContext, createContext, useState, useEffect } from "react";
 import supabase from "./supabase";
 
 const DataContext = createContext();
 
 export const DataContextProvider = ({ children }) => {
+  const { user } = useUserAuth();
   const [group, setGroup] = useState({
     code: "",
     name: "",
     book: null,
   });
-  const [groupStatus, setGroupStatus] = useState("none");
-  const [personalStatus, setPersonalStatus] = useState("none");
+  const [] = useState("none");
+  const { groupStatus, setGroupStatus, personalStatus, setPersonalStatus } =
+    useApp();
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
   const [groups, setGroups] = useState([]);
-  const { user } = useUserAuth();
   const [progress, setProgress] = useState([]);
   const [showGroupProgress, setShowGroupProgress] = useState(false);
   const [notes, setNotes] = useState([]);
   const [personalBook, setPersonalBook] = useState(null);
+  const [personalBooks, setPersonalBooks] = useState([]);
 
   // Create Group Methods -------------------------------------
   const getBooks = async () => {
@@ -245,9 +248,42 @@ export const DataContextProvider = ({ children }) => {
   };
 
   // Personal Progress Method -------------------------------------
-  const addPersonalBook = async (book) => {};
+  const getPersonalBooks = async () => {
+    let { data, error } = await supabase.rpc("get_personal_books", {
+      arg_user_id: user.id,
+    });
+    if (error) {
+      console.error(error);
+      return -1;
+    } else {
+      const returnedBooks = data.map((book) => {
+        return {
+          book_id: book.book_id,
+          title: book.title,
+          author: book.author,
+          num_of_pages: book.num_of_pages,
+          currentPage: book.current_pg,
+          note: book.note,
+          date: new Date(book.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          }),
+        }
+      });
+      console.log("Fetched personal books:", returnedBooks);
+      if (returnedBooks.length === 0) {
+        return 0;
+      }
+      setPersonalBooks(returnedBooks);
+      return 1;
+    }
+  };
 
-  const getUserProgress = async () => {
+  const getPersonalProgress = async () => {
     let { data, error } = await supabase.rpc("get_member_progress", {
       arg_book_id: group.book.book_id,
       arg_user_id: members[i].user_id,
@@ -275,6 +311,17 @@ export const DataContextProvider = ({ children }) => {
 
     handleInitialLoad();
   }, [setGroupStatus]);
+
+  useEffect(() => {
+    const handleInitialLoad = () => {
+      if (window.history.state?.isPersonalSubpage) {
+        window.history.replaceState(null, "");
+        setPersonalStatus("main");
+      }
+    };
+
+    handleInitialLoad();
+  }, [setPersonalStatus]);
 
   return (
     <DataContext.Provider
@@ -306,6 +353,7 @@ export const DataContextProvider = ({ children }) => {
         setPersonalBook,
         setPersonalStatus,
         personalStatus,
+        getPersonalBooks,
       }}
     >
       {children}

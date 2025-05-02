@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
-import BookClub from "./book-club";
+import Personal from "./personal";
 
 export default function HomePage() {
   const { user, googleSignIn } = useUserAuth();
@@ -26,7 +26,7 @@ export default function HomePage() {
   }
   return (
     <div>
-      <BookClub />
+      <Personal />
     </div>
   );
 }
