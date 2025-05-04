@@ -63,7 +63,7 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
       progressUpdate.note = null;
     }
     setLoading(true);
-    await updateProgress(progressUpdate.newPage, progressUpdate.note, "group");
+    await updateProgress(progressUpdate.newPage, progressUpdate.note, group.book.book_id, "group");
     setLoading(false);
     setProgressUpdate({
       currentPage: progressUpdate.newPage,
