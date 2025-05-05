@@ -16,7 +16,7 @@ import { useApp } from "../_utils/app-context";
 
 export default function Header() {
   const { user } = useUserAuth();
-  const { setGroupStatus } = useApp();
+  const { setGroupStatus, setPersonalStatus, page } = useApp();
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const handleMenuToggle = () => {
@@ -27,6 +27,16 @@ export default function Header() {
     setMobileMenu(true);
   };
 
+  const handleLogoClick = () => {
+    if (page === "home") {
+      setGroupStatus("none");
+      return;
+    }
+    if (page === "personal") {
+      setPersonalStatus("main");
+      return;
+    }
+  };
   return (
     <div>
       <header className="sticky top-0 bg-white shadow-md z-50 px-4 md:px-2">
@@ -36,7 +46,7 @@ export default function Header() {
             <div className="mr-4">
               <button
                 type="button"
-                onClick={() => setGroupStatus("none")}
+                onClick={handleLogoClick}
                 className="flex items-center space-x-3"
               >
                 <BookOpenText size={30} className="text-emerald-800" />

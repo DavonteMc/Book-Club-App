@@ -1,46 +1,60 @@
 "use client";
+import { useState } from "react";
+import AddReadBook from "./add-read-book";
+import LoadReadBooks from "./load-read-books";
 
-import { MessageSquare, ChevronRight, ChevronDown } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useDatabase } from "../../_utils/data_context";
+export default function Reviews() {
+  const [bookSelectionMethod, setBookSelectionMethod] = useState("none");
 
-export default function ReadBooks({}) {
-  const { getGroupNotes, notes } = useDatabase();
-  const [showUserNote, setShowUserNote] = useState(false);
-  const [userNoteIndex, setUserNoteIndex] = useState(null);
+  const selectedStyle =
+    "border-emerald-700 border-2 w-2/5 md:w-1/4 h-10 text-base md:text-xl font-semibold text-white p-1 rounded-lg bg-emerald-900 text-emerald-700" +
+    " transition duration-300";
 
-  const handleUserNote = (index) => {
-    if (showUserNote && userNoteIndex !== null && userNoteIndex !== index) {
-      setShowUserNote(false);
-      setUserNoteIndex(index);
-      setShowUserNote(true);
-      return;
-    }
-    if (showUserNote && userNoteIndex === index) {
-      setShowUserNote(false);
-      setUserNoteIndex(null);
-      return;
-    }
-    setShowUserNote(true);
-    setUserNoteIndex(index);
-  };
+  const unSelectedStyle =
+    "border-emerald-700 border-2 w-2/5 md:w-1/4 h-10 text-base md:text-xl font-semibold text-emerald-700 p-1 rounded-lg " +
+    "hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300";
+
 
   return (
-    <div className="space-y-4 shadow-neutral-700 shadow-inner p-6 mb-8 rounded-lg border-b-2 border-white border-opacity-30">
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2">
-            <MessageSquare size={24} /> Read
-          </h3>
-        </div>
+    <div className="mb-8 w-full">
+      <div className="flex w-full flex-col items-center mb-4">
+        <h3 className="text-3xl md:text-5xl text-center mb-5 font-bold">
+          Reviews
+          <p className="text-center text-sm md:text-lg mt-2 text-emerald-950/70 font-semibold">
+            Write personal reviews of the books you read. You can either load an
+            existing review or write a new one.
+          </p>
+        </h3>
 
-        {/* Sort by Page Number */}
-        <div className="space-y-4">
-          <p>Book 1 - Review</p>
-          <p>Book 1 - Review</p>
-          <p>Book 1 - Review</p>
-          <p>Book 1 - Review</p>
-          <p>Book 1 - Review</p>
+        {/* Book Selection Method Buttons*/}
+        <div className="w-full flex-col p-1 mb-8 text-center items-center rounded-lg">
+          <div className="w-full space-x-6 items-center text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setBookSelectionMethod("load");
+              }}
+              className={
+                bookSelectionMethod === "load" ? selectedStyle : unSelectedStyle
+              }
+            >
+              Load Reviews
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setBookSelectionMethod("new");
+              }}
+              className={
+                bookSelectionMethod === "new" ? selectedStyle : unSelectedStyle
+              }
+            >
+              New Review
+            </button>
+          </div>
+          <div className="border-b mt-7 border-emerald-950"></div>
+          {bookSelectionMethod === "load" && <LoadReadBooks />}
+          {bookSelectionMethod === "new" && <AddReadBook onAddition={setBookSelectionMethod}/>}
         </div>
       </div>
     </div>

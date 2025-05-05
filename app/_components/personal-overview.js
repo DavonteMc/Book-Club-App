@@ -53,7 +53,9 @@ export default function PersonalOverview() {
           </div>
           <div className="border-b mt-7 border-emerald-950"></div>
           {bookSelectionMethod === "load" && <LoadBooks />}
-          {bookSelectionMethod === "new" && <TrackNewBook onTrackedBook={setBookSelectionMethod}/>}
+          {bookSelectionMethod === "new" && (
+            <TrackNewBook onTrackedBook={setBookSelectionMethod} />
+          )}
         </div>
       </div>
     </div>

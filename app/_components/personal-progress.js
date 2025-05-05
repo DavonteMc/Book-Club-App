@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import ProgressTracker from "../progress-tracker";
+import ProgressTracker from "./progress-tracker";
 import UpdatePersonalProgress from "./update-personal-progress";
 import PersonalNotes from "./personal-notes";
 
@@ -51,7 +51,7 @@ export default function PersonalProgress({ book, onCompletion }) {
       return;
     }
     setNotes(true);
-  };  
+  };
 
   return (
     <div className="mb-8 w-full md:w-3/4 flex flex-col items-center py-4 px-3 shadow-lg border border-neutral-900/30 shadow-neutral-900/10 rounded-xl">

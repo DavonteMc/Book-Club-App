@@ -17,7 +17,7 @@ export default function LandingPage() {
     <div>
       {!user && (
         <div className="flex flex-col items-center justify-center h-screen bg-neutral-50">
-          <h1 className="text-5xl text-center mb-10 font-bold p-2">Welcome to Bookie</h1>
+          <h1 className="text-5xl text-center mb-10 font-bold px-2">Welcome to Bookie</h1>
           <Link
             href="home"
             className={

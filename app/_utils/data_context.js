@@ -25,6 +25,7 @@ export const DataContextProvider = ({ children }) => {
   const [personalBook, setPersonalBook] = useState(null);
   const [personalBooks, setPersonalBooks] = useState([]);
   const [personalNotes, setPersonalNotes] = useState([]);
+  const [readBooks, setReadBooks] = useState([]);
 
   // Create Group Methods -------------------------------------
   const getBooks = async () => {
@@ -311,6 +312,50 @@ export const DataContextProvider = ({ children }) => {
     setPersonalNotes(returnedNotes);
   };
 
+  // Book Review Methods -------------------------------------
+  const getReadBooks = async () => {
+    let { data, error } = await supabase.rpc("get_read_books", {
+      arg_user_id: user.id,
+    });
+    if (error) {
+      console.error("Error getting read books:", error);
+      return false;
+    } else console.log("Fetched Read Books" + data);
+
+    const returnedReadBooks = data.map((book) => {
+      return {
+        id: book.read_book_id,
+        title: book.book_title,
+        review: book.review,
+        rating: book.rating,
+        date: new Date(book.created_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        }),
+      };
+    });
+
+    setReadBooks(returnedReadBooks);
+    return true;
+  };
+
+  const addReadBook = async (title, review, rating) => {
+    let { data, error } = await supabase.rpc("add_read_book", {
+      arg_book_title: title,
+      arg_rating: rating,
+      arg_review: review,
+      arg_user_id: user.id,
+    });
+    if (error) {
+      console.error("Error adding read book:", error);
+    } else console.log("Added Book" + data);
+  };
+
+  // Initial Load Methods -------------------------------------
   useEffect(() => {
     const handleInitialLoad = () => {
       if (window.history.state?.isBookClubSubpage) {
@@ -367,6 +412,9 @@ export const DataContextProvider = ({ children }) => {
         getPersonalBooks,
         getPersonalNotes,
         personalNotes,
+        getReadBooks,
+        addReadBook,
+        readBooks,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useDatabase } from "../../_utils/data_context";
+import { useDatabase } from "../_utils/data_context";
 
 export default function UpdatePersonalProgress({
   book,

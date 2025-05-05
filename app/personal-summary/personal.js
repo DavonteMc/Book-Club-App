@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { useApp } from "../_utils/app-context";
 import Header from "../_components/header";
-import PersonalOverview from "../_components/under-development/personal-overview";
+import PersonalOverview from "../_components/personal-overview";
+import Reviews from "../_components/under-development/reviews";
 
 export default function Personal() {
   const { user, googleSignIn } = useUserAuth();
@@ -121,7 +122,7 @@ export default function Personal() {
               {/* Component containers */}
               <div>
                 {personalStatus === "progress" && <PersonalOverview />}
-                {personalStatus === "reviews" && <p>Reviews</p>}
+                {personalStatus === "reviews" && <Reviews />}
                 {personalStatus === "reading-goals" && <p>Reading Goals</p>}
                 {personalStatus === "want-to-read" && <p>Want-to-Read</p>}
               </div>

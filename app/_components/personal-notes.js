@@ -2,7 +2,7 @@
 
 import { ChevronRight, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useDatabase } from "../../_utils/data_context";
+import { useDatabase } from "../_utils/data_context";
 
 export default function PersonalNotes({ book }) {
   const { getPersonalNotes, personalNotes } = useDatabase();
