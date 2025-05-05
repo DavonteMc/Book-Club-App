@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="font-serif bg-neutral-50 text-emerald-950">
+      <body className="font-serif bg-neutral-950 text-emerald-950">
         <AuthContextProvider>
           <AppContextProvider>
             <DataContextProvider>{children}</DataContextProvider>
