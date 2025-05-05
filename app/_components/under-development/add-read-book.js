@@ -39,7 +39,7 @@ export default function AddReadBook({ onAddition }) {
       isNaN(parseFloat(readBook.rating))
     ) {
       setError(true);
-      setErrorMessage("Please enter a valid rating between 0-10");
+      setErrorMessage("Please enter a valid rating between 0-10 with increments of 0.1"); 
       return;
     }
 
@@ -57,7 +57,7 @@ export default function AddReadBook({ onAddition }) {
   return (
     <div className="flex flex-col p-1 md:p-6 place-self-center w-full md:w-1/2">
       <h2 className="w-full text-center text-xl md:text-3xl font-semibold p-1 mb-3 md:mb-6">
-        Add a Completed Book: {readBook.title} rating: {readBook.rating}
+        Add a Review
       </h2>
       <div className="flex-1">
         <form onSubmit={handleSubmit} className="flex-1 flex-col text-left">
@@ -86,7 +86,7 @@ export default function AddReadBook({ onAddition }) {
           />
           {/* Book Rating 0-10 */}
           <p className="text-md font-semibold mt-4">
-            Rating 0-10 w/0.1 Increments:
+            Rating 0-10:
           </p>
           <input
             type="text"

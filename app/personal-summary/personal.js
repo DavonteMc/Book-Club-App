@@ -5,7 +5,7 @@ import { useUserAuth } from "../_utils/auth-context";
 import { useApp } from "../_utils/app-context";
 import Header from "../_components/header";
 import PersonalOverview from "../_components/personal-overview";
-import Reviews from "../_components/under-development/reviews";
+import Reviews from "../_components/under-development/reviews-overview";
 
 export default function Personal() {
   const { user, googleSignIn } = useUserAuth();

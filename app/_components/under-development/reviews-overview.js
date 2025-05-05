@@ -27,7 +27,7 @@ export default function Reviews() {
         </h3>
 
         {/* Book Selection Method Buttons*/}
-        <div className="w-full flex-col p-1 mb-8 text-center items-center rounded-lg">
+        <div className="w-full flex-col p-1 mb-8 text-center rounded-lg">
           <div className="w-full space-x-6 items-center text-center">
             <button
               type="button"
@@ -38,7 +38,7 @@ export default function Reviews() {
                 bookSelectionMethod === "load" ? selectedStyle : unSelectedStyle
               }
             >
-              Load Reviews
+              Load
             </button>
             <button
               type="button"
@@ -49,7 +49,7 @@ export default function Reviews() {
                 bookSelectionMethod === "new" ? selectedStyle : unSelectedStyle
               }
             >
-              New Review
+              Add New
             </button>
           </div>
           <div className="border-b mt-7 border-emerald-950"></div>
