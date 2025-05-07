@@ -45,36 +45,41 @@ export default function GroupNotes({}) {
                 <div>
                   {/* Desktop button */}
                   <button
-                    className="hidden hover:text-neutral-900 md:flex items-center"
+                    className="hidden hover:text-neutral-900 p-2 md:flex items-center"
                     onClick={() => handleUserNote(index)}
                   >
-                    {member.member_name} on page.{member.current_pg}
+                    <div className="flex flex-col">
+                      <p className="ml-1 font-semibold">{member.member_name}</p>
+                      <p className="text-xs text-left ml-1 ">
+                        On page: {member.current_pg}
+                      </p>
+                    </div>
+
                     {showUserNote && index === userNoteIndex ? (
-                      <ChevronDown size={16} className="ml-1" />
+                      <ChevronDown size={28} className="ml-4" />
                     ) : (
-                      <ChevronRight size={16} className="ml-1" />
+                      <ChevronRight size={28} className="ml-4" />
                     )}
                   </button>
                   {/* Mobile button */}
                   <button
-                    className="md:hidden hover:text-neutral-900 flex items-center"
+                    className="md:hidden hover:text-neutral-900 flex-col items-center"
                     onClick={() => handleUserNote(index)}
                   >
-                    <span className="w-5/5 text-wrap">
-                      {member.member_name} on page.{member.current_pg}
-                    </span>
+                    <p className="w-full text-wrap">{member.member_name}</p>
+                    <p className="text-xs text-left mt-1">
+                      On page: {member.current_pg}
+                    </p>
                   </button>
                 </div>
 
-                <span className="text-xs text-wrap w-1/5 text-emerald-900 whitespace-nowrap">
+                <p className="text-xs text-wrap md:text-sm w-2/6 text-emerald-900 whitespace-nowrap">
                   {member.date}
-                </span>
+                </p>
               </div>
               {showUserNote && index === userNoteIndex && (
-                <div className="flex-1 border-t py-2 md:py-4 border-emerald-950/30 ">
-                  <p className="text-sm text-wrap md:ml-4 ">
-                    {member.note}
-                  </p>
+                <div className="flex-1 flex-col border-t py-1 md:py-4 mt-2 border-emerald-950/30 ">
+                  <p className="text-sm text-wrap md:ml-4 ">{member.note}</p>
                 </div>
               )}
             </div>

@@ -84,9 +84,9 @@ export default function UpdatePersonalProgress({
   };
 
   return (
-    <div className="w-full md:w-1/2">
-      <form className="flex w-full flex-col gap-2 mt-6" onSubmit={handleSubmit}>
-        <div className="flex flex-col text-left gap-5">
+    <div className="w-full md:w-3/4 my-4 md:my-8 md:border md:border-emerald-800 md:rounded-lg md:px-4 md:pb-4">
+      <form className="flex w-full flex-col gap-2 mt-6 items-center" onSubmit={handleSubmit}>
+        <div className="flex flex-col text-left place-self-start gap-5">
           <p>
             Current Page:{" "}
             <span className="font-bold">
@@ -96,18 +96,18 @@ export default function UpdatePersonalProgress({
             </span>
           </p>
           <div className="flex flex-row items-center">
-            <p className="flex-grow">Set New Current Page:</p>
+            <p >Set New Current Page:</p>
             <input
               type="text"
               placeholder="Enter page number"
-              className="border border-emerald-950 rounded-lg pb-1 w-10 md:w-14 text-center text-emerald-950 bg-neutral-50"
+              className="border border-emerald-950 rounded-lg pb-1 w-10 md:w-14 ml-3 md:ml-6 text-center text-emerald-950 bg-neutral-50"
               onChange={handlePageChange}
               value={progressUpdate.newPage}
             />
           </div>
         </div>
         {pageError && <p className="text-red-500/80">{errorMessage}</p>}
-        <p className="text-left">Note(s) for Section:</p>
+        <p className="text-left place-self-start mt-5">Note(s) for Section:</p>
         <textarea
           className="w-full align-top min-h-[100px] md:min-h-[150px] p-3 resize-y 
             border rounded-lg border-gray-300 
@@ -121,9 +121,9 @@ export default function UpdatePersonalProgress({
         />
         <button
           type={loading ? "button" : "submit"}
-          className="mt-3 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
+          className="mt-3 w-5/6 md:4/6 md:h-9 h-8 border-emerald-700 border-2 font-semibold text-emerald-700 px-4 md:py-2 rounded-lg hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300"
         >
-          Update Progress
+          Save
         </button>
         {loading && <p className="text-center text-lg">Updating...</p>}
       </form>

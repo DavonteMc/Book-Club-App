@@ -33,7 +33,7 @@ export default function PersonalNotes({ book }) {
   }, []);
 
   return (
-    <div className="mt-6 h-full w-full md:w-1/2 rounded-lg p-3 ">
+    <div className="mt-6 h-full w-full md:w-5/6 rounded-lg p-3 ">
       <div>
         <div className="flex flex-col space-y-4">
           {personalNotes.map((note, index) => (
@@ -48,7 +48,7 @@ export default function PersonalNotes({ book }) {
                     className="hidden hover:text-neutral-900 md:flex items-center"
                     onClick={() => handleUserNote(index)}
                   >
-                    On page:{note.current_pg}
+                    On page: {note.current_pg}
                     {showUserNote && index === userNoteIndex ? (
                       <ChevronDown size={16} className="ml-1" />
                     ) : (
@@ -71,9 +71,9 @@ export default function PersonalNotes({ book }) {
                 </span>
               </div>
               {showUserNote && index === userNoteIndex && (
-                <p className="flex-1 text-sm border-t pt-2 border-emerald-950/30 mt-2">
-                  {note.note}
-                </p>
+                <div className="flex-1 flex-col border-t py-1 md:py-4 mt-2 border-emerald-950/30 ">
+                <p className="text-sm text-left text-wrap md:ml-4 ">{note.note}</p>
+              </div>
               )}
             </div>
           ))}

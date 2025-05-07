@@ -54,14 +54,14 @@ export default function PersonalProgress({ book, onCompletion }) {
   };
 
   return (
-    <div className="mb-8 w-full md:w-3/4 flex flex-col items-center py-4 px-3 shadow-lg border border-neutral-900/30 shadow-neutral-900/10 rounded-xl">
+    <div className="mb-8 w-full md:w-4/6 flex flex-col items-center py-4 px-3 shadow-lg border border-neutral-900/30 shadow-neutral-900/10 rounded-xl">
       <h3 className="w-full text-center text-base md:text-2xl font-medium py-2 ">
         Progress on:{" "}
         <span className="font-semibold text-emerald-700 ">{book.title}</span>{" "}
         <span className="text-sm md:text-xl">by</span>{" "}
         <span className="font-semibold text-emerald-700">{book.author}</span>
       </h3>
-      <div className="flex flex-col w-full h-full mt-5 text-center items-center">
+      <div className="flex flex-col w-full h-full mb-5 text-center items-center">
         <ProgressTracker
           page={book.currentPage}
           value={generateProgress(book.currentPage)}
@@ -69,10 +69,10 @@ export default function PersonalProgress({ book, onCompletion }) {
         />
       </div>
       {/* Update and Notes Buttons - Desktop*/}
-      <div className="w-full text-center space-x-4 hidden md:block">
+      <div className="w-full text-center text-sm space-x-4 hidden md:block">
         <button
           type="button"
-          className={`w-1/5 h-12 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+          className={`w-1/6 h-10 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
             update ? selectedStyle : unSelectedStyle
           }`}
           onClick={handleUpdateClick}
@@ -81,7 +81,7 @@ export default function PersonalProgress({ book, onCompletion }) {
         </button>
         <button
           type="button"
-          className={`w-1/5 h-12 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
+          className={`w-1/6 h-10 border-emerald-700 border-2 font-semibold p-1 rounded-lg transition duration-300 ${
             notes ? selectedStyle : unSelectedStyle
           }`}
           onClick={handleNotesClick}
@@ -93,7 +93,7 @@ export default function PersonalProgress({ book, onCompletion }) {
       <div className="w-full flex flex-col text-center space-y-3 items-center md:hidden">
         <button
           type="button"
-          className={`w-4/5 text-xs h-9 border-emerald-700 border-2 font-semibold px-1 rounded-lg transition duration-300 ${
+          className={`w-4/5 text-xs h-7 border-emerald-700 border-2 font-semibold px-1 rounded-lg transition duration-300 ${
             update ? selectedStyle : unSelectedStyle
           }`}
           onClick={handleUpdateClick}
@@ -102,7 +102,7 @@ export default function PersonalProgress({ book, onCompletion }) {
         </button>
         <button
           type="button"
-          className={`w-4/5 text-xs h-9 border-emerald-700 border-2 font-semibold px-1 rounded-lg transition duration-300 ${
+          className={`w-4/5 text-xs h-7 border-emerald-700 border-2 font-semibold px-1 rounded-lg transition duration-300 ${
             notes ? selectedStyle : unSelectedStyle
           }`}
           onClick={handleNotesClick}
