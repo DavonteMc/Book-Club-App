@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddReadBook from "./add-read-book";
 import LoadReadBooks from "./load-read-books";
 
@@ -14,6 +14,7 @@ export default function Reviews() {
     "border-emerald-700 border-2 w-2/5 md:w-1/4 h-10 text-base md:text-xl font-semibold text-emerald-700 p-1 rounded-lg " +
     "hover:bg-emerald-900 hover:text-white hover:font-semibold transition duration-300";
 
+  useEffect(() => {}, [bookSelectionMethod]);
 
   return (
     <div className="mb-8 w-full">
@@ -54,7 +55,9 @@ export default function Reviews() {
           </div>
           <div className="border-b mt-7 border-emerald-950"></div>
           {bookSelectionMethod === "load" && <LoadReadBooks />}
-          {bookSelectionMethod === "new" && <AddReadBook onAddition={setBookSelectionMethod}/>}
+          {bookSelectionMethod === "new" && (
+            <AddReadBook onAddition={setBookSelectionMethod} />
+          )}
         </div>
       </div>
     </div>

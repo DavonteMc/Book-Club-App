@@ -79,7 +79,7 @@ export default function AddReadBook({ onAddition }) {
             placeholder:text-gray-400 text-emerald-950 bg-neutral-50
             disabled:bg-gray-900 disabled:cursor-not-allowed 
             transition-colors
-            text-base leading-relaxed"
+            text-base leading-relaxed focus:outline-none focus:ring-2  focus:ring-emerald-800"
             onChange={(e) => handleReviewChange(e)}
             value={readBook.review}
             placeholder="Enter review here..."

@@ -355,6 +355,28 @@ export const DataContextProvider = ({ children }) => {
     } else console.log("Added Book" + data);
   };
 
+  const updateReadBook = async (readBookId, review, rating) => {
+    let { data, error } = await supabase.rpc("update_read_book", {
+      arg_read_book_id: readBookId,
+      arg_user_id: user.id,
+      arg_new_rating: rating,
+      arg_new_review: review,
+    });
+    if (error) {
+      console.error("Error updating read book:", error);
+    } else console.log("Updated Book" + data);
+  };
+
+  const deleteReadBook = async (readBookId) => {
+    let { data, error } = await supabase.rpc("delete_read_book", {
+      arg_read_book_id: readBookId,
+      arg_user_id: user.id,
+    });
+    if (error) {
+      console.error("Error deleting read book:", error);
+    } else console.log("Deleted Book" + data);
+  };
+
   // Initial Load Methods -------------------------------------
   useEffect(() => {
     const handleInitialLoad = () => {
@@ -414,6 +436,8 @@ export const DataContextProvider = ({ children }) => {
         personalNotes,
         getReadBooks,
         addReadBook,
+        updateReadBook,
+        deleteReadBook,
         readBooks,
       }}
     >

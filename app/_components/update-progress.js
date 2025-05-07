@@ -84,7 +84,7 @@ export default function UpdateProgress({ onUpdate, onCompletion }) {
   };
 
   return (
-    <div className="w-full  md:w-1/3">
+    <div className="w-full md:w-1/2">
       <form className="flex w-full flex-col gap-2 mt-6 shadow-lg border p-5 border-neutral-900/30 shadow-neutral-900/10 rounded-xl" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row gap-5">
           <p>

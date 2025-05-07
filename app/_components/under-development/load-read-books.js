@@ -9,6 +9,14 @@ export default function LoadReadBooks() {
   const { readBooks, getReadBooks } = useDatabase();
   const [updateProcessed, setUpdateProcessed] = useState(false);
 
+  const handleChanges = () => {
+    if (!updateProcessed) {
+      setUpdateProcessed(true);
+      return;
+    }
+    setUpdateProcessed(false);
+  };
+
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -36,7 +44,7 @@ export default function LoadReadBooks() {
         <p>You don't have any reviews for books you have read</p>
       )}
       {!loading && !error && readBooks.length > 0 && (
-        <ReadBooks books={readBooks} />
+        <ReadBooks onUpdate={handleChanges} books={readBooks} />
       )}
     </div>
   );

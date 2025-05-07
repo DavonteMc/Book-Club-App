@@ -35,7 +35,7 @@ export default function GroupNotes({}) {
   return (
     <div className="mt-6 h-full w-full md:w-1/2 rounded-lg p-3 ">
       <div>
-                <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4">
           {notes.map((member, index) => (
             <div
               key={index}
@@ -71,9 +71,11 @@ export default function GroupNotes({}) {
                 </span>
               </div>
               {showUserNote && index === userNoteIndex && (
-                <p className="flex-1 text-sm border-t pt-2 border-emerald-950/30 mt-2">
-                  {member.note}
-                </p>
+                <div className="flex-1 border-t py-2 md:py-4 border-emerald-950/30 ">
+                  <p className="text-sm text-wrap md:ml-4 ">
+                    {member.note}
+                  </p>
+                </div>
               )}
             </div>
           ))}
